@@ -1,0 +1,55 @@
+{
+  "name": "shadowdiscordbot",
+  "version": "1.0.0",
+  "description": "Discord Community Bot",
+  "main": "src/app.ts",
+  "scripts": {
+    "start": "cross-env ENV=development ts-node src/app.ts",
+    "dev": "npm run lint && npm run start",
+    "lint": "eslint --max-warnings 0 src --ext .ts",
+    "lint:fix": "npx eslint src --ext .ts --fix",
+    "build": "npx tsc",
+    "watch:dev": "nodemon",
+    "docker:build": "docker build -t orphoros/shadow .",
+    "docker:push": "docker push orphoros/shadow"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Orphoros/Shadow.git"
+  },
+  "author": "Orphoros CTC",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/Orphoros/Shadow/issues"
+  },
+  "homepage": "https://github.com/Orphoros/Shadow#readme",
+  "dependencies": {
+    "@discordjs/builders": "^0.15.0",
+    "cross-env": "^7.0.3",
+    "discord.js": "^13.8.1",
+    "dotenv": "^16.0.1",
+    "ts-node": "^10.9.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.0.4",
+    "@typescript-eslint/eslint-plugin": "^5.30.6",
+    "@typescript-eslint/parser": "^5.30.6",
+    "eslint": "^8.19.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "nodemon": "^2.0.19",
+    "typescript": "^4.7.4"
+  },
+  "nodemonConfig": {
+    "exec": "npm run start",
+    "watch": [
+      "src/",
+      ".env"
+    ],
+    "ext": "js,json,ts",
+    "ignore": [
+      "**/__tests__/**",
+      "*.test.js",
+      "*.spec.js"
+    ]
+  }
+}
