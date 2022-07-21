@@ -1,0 +1,30 @@
+{
+    "root": true,
+    "parser": "@typescript-eslint/parser",
+    "env": {
+        "jest": true,
+        "node": true
+    },
+    "plugins": [
+        "@typescript-eslint"
+    ],
+    "extends": [
+        "airbnb-base",
+        "eslint:recommended",
+        "plugin:@typescript-eslint/eslint-recommended",
+        "plugin:@typescript-eslint/recommended"
+    ],
+    "rules": {
+        "linebreak-style": "off",
+        "import/no-cycle": "off",
+        "no-param-reassign": "off",
+        "consistent-return": "off",
+        "no-plusplus": "off",
+        "no-console": "off",
+        "import/extensions": "off",
+        "import/no-unresolved": "off",
+        "@typescript-eslint/no-non-null-assertion": "off",
+        "@typescript-eslint/no-explicit-any": "off",
+        "no-restricted-syntax": "off"
+    }
+}
