@@ -20,11 +20,14 @@
         "no-param-reassign": "off",
         "consistent-return": "off",
         "no-plusplus": "off",
-        "no-console": "off",
         "import/extensions": "off",
         "import/no-unresolved": "off",
         "@typescript-eslint/no-non-null-assertion": "off",
         "@typescript-eslint/no-explicit-any": "off",
-        "no-restricted-syntax": "off"
+        "no-restricted-syntax": "off",
+        "no-shadow": "off",
+        "@typescript-eslint/no-shadow": [
+            "error"
+        ]
     }
 }
