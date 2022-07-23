@@ -4,7 +4,7 @@
   "description": "Discord Community Bot",
   "main": "src/app.ts",
   "scripts": {
-    "start": "cross-env ENV=development ts-node src/app.ts",
+    "start": "cross-env ENV=development DEBUG=* ts-node src/app.ts",
     "dev": "npm run lint && npm run start",
     "lint": "eslint --max-warnings 0 src --ext .ts",
     "lint:fix": "npx eslint src --ext .ts --fix",
@@ -26,11 +26,13 @@
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
     "cross-env": "^7.0.3",
+    "debug": "^4.3.4",
     "discord.js": "^13.8.1",
     "dotenv": "^16.0.1",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
+    "@types/debug": "^4.1.7",
     "@types/node": "^18.0.4",
     "@typescript-eslint/eslint-plugin": "^5.30.6",
     "@typescript-eslint/parser": "^5.30.6",
