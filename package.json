@@ -25,6 +25,7 @@
   "homepage": "https://github.com/Orphoros/Shadow#readme",
   "dependencies": {
     "@discordjs/builders": "^0.15.0",
+    "@types/mongoose": "^5.11.97",
     "cross-env": "^7.0.3",
     "debug": "^4.3.4",
     "discord-api-types": "^0.36.3",
