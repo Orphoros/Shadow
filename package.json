@@ -4,8 +4,10 @@
   "description": "Discord Community Bot",
   "main": "src/app.ts",
   "scripts": {
-    "start": "cross-env ENV=development DEBUG=* ts-node src/app.ts",
-    "dev": "npm run lint && npm run start",
+    "start": "cross-env DEBUG=APP:* ts-node src/app.ts",
+    "start:clean": "cross-env DEBUG=APP:* RESET_COMMANDS=true ENV=production ts-node src/app.ts",
+    "dev": "npm run lint && cross-env ENV=development npm run start",
+    "dev:clean": "npm run lint && cross-env RESET_COMMANDS=true npm run dev",
     "lint": "eslint --max-warnings 0 src --ext .ts",
     "lint:fix": "npx eslint src --ext .ts --fix",
     "build": "npx tsc",
