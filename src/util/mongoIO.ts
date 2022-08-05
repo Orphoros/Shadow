@@ -38,6 +38,13 @@ export function getRulesChannelId(guildId: string): Promise<string | undefined> 
   }).catch(() => '');
 }
 
+export function getWelcomeMessage(guildId: string): Promise<string | undefined> {
+  return getBotConfig(guildId).then((config) => {
+    if (config) return config.welcome_message;
+    return '';
+  }).catch(() => '');
+}
+
 export function getMainChannelId(guildId: string): Promise<string | undefined> {
   return getBotConfig(guildId).then((config) => {
     if (config) return config.main_channel_id;
