@@ -2,6 +2,7 @@ import { MessageEmbed, TextChannel } from 'discord.js';
 import path from 'path';
 import {
   getIntroductionChannelId, getMainChannelId,
+  getMembersCountChannelID,
   getRulesChannelId, getWelcomeChannelId, getWelcomeMessage,
 } from '../../util/mongoIO';
 import { DiscordClient } from '../../typings/client';
@@ -14,6 +15,7 @@ export default (client: DiscordClient): void => {
     const introductionChannelId = await getIntroductionChannelId(member.guild.id);
     const welcomeMessage = await getWelcomeMessage(member.guild.id);
     const mainChannelId = await getMainChannelId(member.guild.id);
+    const memberCountChannelId = await getMembersCountChannelID(member.guild.id);
 
     const welcomeEmbed = new MessageEmbed()
 
@@ -40,6 +42,12 @@ export default (client: DiscordClient): void => {
     const resDir = path.resolve('./resources');
     channel.send({ embeds: [welcomeEmbed], files: [`${resDir}/wp_banner.png`] }).catch((e) => {
       errorLog('Could not send message to user: %O', e);
+    });
+
+    const c = member.guild.channels.cache.get(memberCountChannelId ?? '');
+
+    c?.setName(`Member count: ${member.guild.members.cache.filter((m) => !m.user.bot).size}`).catch((e) => {
+      errorLog('Could not set member count: %O', e);
     });
   });
 };
