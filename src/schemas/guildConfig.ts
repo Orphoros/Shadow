@@ -11,8 +11,9 @@ export interface IBotGuildConfig extends Document {
     introduction_channel_id?: string;
     admin_users?: string[];
     admin_roles?: string[];
-    auto_vc_channel_name?: string;
+    auto_vc_channel_id?: string;
     welcome_message?: string;
+    members_count_channel_id?: string;
   }
 
 const schema: Schema = new Schema({
@@ -57,12 +58,17 @@ const schema: Schema = new Schema({
     required: false,
     nullable: true,
   },
-  auto_vc_channel_name: {
+  auto_vc_channel_id: {
     type: String,
     required: false,
     nullable: true,
   },
   welcome_message: {
+    type: String,
+    required: false,
+    nullable: true,
+  },
+  members_count_channel_id: {
     type: String,
     required: false,
     nullable: true,

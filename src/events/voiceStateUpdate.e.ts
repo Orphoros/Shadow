@@ -1,6 +1,6 @@
 import { errorLog } from '../util/dbg';
 import { DiscordClient } from '../typings/client';
-import { getAutoVoiceChannelName } from '../util/mongoIO';
+import { getAutoVoiceChannelId } from '../util/mongoIO';
 
 export default (client: DiscordClient): void => {
   client.on('voiceStateUpdate', async (oldState, newState) => {
@@ -8,9 +8,9 @@ export default (client: DiscordClient): void => {
     const newChannel = newState.channel;
     const oldChannel = oldState.channel;
     const user = await client.users.fetch(newState.id);
-    const vcName = await getAutoVoiceChannelName(guild.id);
+    const vc = await getAutoVoiceChannelId(guild.id);
 
-    if (!oldChannel && newChannel!.name === vcName) {
+    if (!oldChannel && newChannel!.id === vc) {
       await guild.channels
         .create(`🗣️ ${user.username}`, {
           type: 'GUILD_VOICE',

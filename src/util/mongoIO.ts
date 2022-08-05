@@ -10,9 +10,9 @@ function getBotConfig(guildId: string)
   return BotGuildConfig.findOne({ guild_id: guildId });
 }
 
-export function getAutoVoiceChannelName(guildId: string): Promise<string | undefined> {
+export function getAutoVoiceChannelId(guildId: string): Promise<string | undefined> {
   return getBotConfig(guildId).then((config) => {
-    if (config) return config.auto_vc_channel_name;
+    if (config) return config.auto_vc_channel_id;
     return '';
   }).catch(() => '');
 }
@@ -41,6 +41,13 @@ export function getRulesChannelId(guildId: string): Promise<string | undefined> 
 export function getWelcomeMessage(guildId: string): Promise<string | undefined> {
   return getBotConfig(guildId).then((config) => {
     if (config) return config.welcome_message;
+    return '';
+  }).catch(() => '');
+}
+
+export function getMembersCountChannelID(guildId: string): Promise<string | undefined> {
+  return getBotConfig(guildId).then((config) => {
+    if (config) return config.members_count_channel_id;
     return '';
   }).catch(() => '');
 }
