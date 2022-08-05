@@ -19,7 +19,7 @@ export default (client: DiscordClient): void => {
         .then((c) => member!.voice.setChannel(c))
         .catch((e) => errorLog('Could not automatically create voice channel: %O', e));
     } else if (!newState.channel) {
-      if (oldChannel?.members.size === 0) {
+      if (oldChannel?.members.size === 0 && oldChannel.name.startsWith('🗣 ')) {
           oldState!.channel!.delete().catch((e) => errorLog('Could not clear up VC automatically: %O', e));
       }
     }
