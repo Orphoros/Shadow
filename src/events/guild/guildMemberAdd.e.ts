@@ -21,7 +21,7 @@ export default (client: DiscordClient): void => {
       .setTitle('Hello!')
       .setAuthor({ name: `${member.user.username}`, iconURL: `${member.user.displayAvatarURL()}` })
       .setDescription(
-        `${welcomeMessage?.replace('\\n', '\n')}
+        `${welcomeMessage?.replaceAll('\\n', '\n')}
         
         You joined <t:${Math.floor(Date.now() / 1000)}:R>`,
       )
