@@ -37,23 +37,16 @@ export default {
           emoji: r.role_emoji,
         }));
 
-        options.push({
-          label: 'None',
-          value: '-1',
-          description: 'No roles from this selection',
-          emoji: '❌',
-        });
-
         const panelMsg = new MessageEmbed()
           .setColor('#0099ff')
-          .setTitle('Select your role from the list below');
+          .setTitle('Select your roles from the list below! Deselect all roles to clear your roles!');
         const components = [
           new MessageActionRow().addComponents(new MessageSelectMenu()
             .setCustomId('reaction-roles')
-            .setMaxValues(1)
-            .setMinValues(1)
+            .setMinValues(0)
+            .setMaxValues(roleOptions.length)
             .addOptions(options)
-            .setPlaceholder('Select a role')),
+            .setPlaceholder('Select your roles')),
         ];
         interaction.reply({
           embeds: [returnEmbed('Panel displayed successfully!', EmbedMessageType.Success)],

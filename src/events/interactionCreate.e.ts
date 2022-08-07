@@ -18,9 +18,6 @@ export default (client: DiscordClient): void => {
       if (interaction.isSelectMenu()) {
         switch (interaction.customId) {
           case 'reaction-roles': {
-            const roleID = interaction.values[0];
-            const role = interaction.guild?.roles.cache.get(roleID);
-
             const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
 
             const roleOptions: ISelectableRoleOption[] = await SelectableRoleOption.find({
@@ -33,31 +30,39 @@ export default (client: DiscordClient): void => {
               }
             });
 
-            if (roleID === '-1') {
+            if (interaction.values.length === 0) {
               interaction.reply({
-                embeds: [returnEmbed('Your selectable roles has been cleared!', EmbedMessageType.Info)],
+                embeds: [returnEmbed('Your roles have been cleared!', EmbedMessageType.Success)],
+                ephemeral: true,
+              }).catch((e) => {
+                errorLog('Could not send interaction message to user: %O', e);
+              });
+              return;
+            }
+
+            let errFlag = false;
+            interaction.values.forEach((r) => {
+              memberRoles.add(r).catch(() => {
+                errFlag = true;
+              });
+            });
+
+            if (errFlag) {
+              interaction.reply({
+                embeds: [returnEmbed('Could not update all the roles for you!', EmbedMessageType.Warning)],
                 ephemeral: true,
               }).catch((e) => {
                 errorLog('Could not send interaction message to user: %O', e);
               });
             } else {
-              memberRoles.add(roleID)
-                .then(() => {
-                  interaction.reply({
-                    embeds: [returnEmbed(`The role <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success)],
-                    ephemeral: true,
-                  }).catch((e) => {
-                    errorLog('Could not send interaction message to user: %O', e);
-                  });
-                }).catch(() => {
-                  interaction.reply({
-                    embeds: [returnEmbed(`Does not have the permission to assign <@&${role?.id}> to you!`, EmbedMessageType.Error)],
-                    ephemeral: true,
-                  }).catch((e2) => {
-                    errorLog('Could not send interaction message to user: %O', e2);
-                  });
-                });
+              interaction.reply({
+                embeds: [returnEmbed('Your role selection have been updated!', EmbedMessageType.Success)],
+                ephemeral: true,
+              }).catch((e) => {
+                errorLog('Could not send interaction message to user: %O', e);
+              });
             }
+
             break;
           }
 
