@@ -1,0 +1,10 @@
+node_modules
+package-lock.json
+.env
+LICENSE
+EXAMPLE.env
+.github
+README.md
+.eslintrc
+.eslintignore
+.gitignore
