@@ -10,7 +10,7 @@ export default (client: DiscordClient): void => {
     const user = await client.users.fetch(newState.id);
     const vc = await getAutoVoiceChannelId(guild.id);
 
-    if (!oldChannel && newChannel!.id === vc) {
+    if (newChannel && newChannel!.id === vc) {
       await guild.channels
         .create(`🗣️ ${user.username}`, {
           type: 'GUILD_VOICE',
