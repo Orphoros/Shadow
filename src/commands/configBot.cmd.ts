@@ -250,7 +250,7 @@ export default {
           const channelID = interaction.options.getChannel('announcements-channel')?.id;
 
           const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
+            .find((c) => c.id === channelID && (c.type === 'GUILD_TEXT' || c.type === 'GUILD_NEWS') && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
           if (!cnl) {
             interaction.reply({
               embeds: [returnEmbed('Could not set this channel for the announcements channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error)],
