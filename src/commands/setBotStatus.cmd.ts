@@ -7,7 +7,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { DiscordClient } from '../typings/client';
 import { BotStatusConfig } from '../schemas';
 import {
-  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, sendResponse,
+  isUserAuthorized, EmbedMessageType, sendResponse, sendCrashResponse,
 } from '../util';
 
 export default {
@@ -90,13 +90,7 @@ export default {
           sendResponse(interaction, `Bot status is now ${type} with message: ${activityName} ${statusMsg}`, EmbedMessageType.Info, 'Could not send interaction message to user');
         })
         .catch((e) => {
-          errorLog('Could not save the bot status config\n========================\n%O', e);
-          interaction.reply({
-            embeds: [returnCrashMsg('Could not set the new bot status with the database!', e)],
-            ephemeral: true,
-          }).catch((e2) => {
-            errorLog('Could not send interaction message to user\n========================\n%O', e2);
-          });
+          sendCrashResponse(interaction, 'Could not set the new bot status with the database!', e);
         });
     } else {
       sendResponse(interaction, 'You do not have permission to set the status of the bot.', EmbedMessageType.Error, 'Could not send interaction message to user');

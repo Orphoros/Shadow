@@ -6,7 +6,7 @@ import {
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableRoleOption, SelectableRoleOption } from '../../../schemas';
 import {
-  isUserAuthorized, errorLog, EmbedMessageType, returnEmbed, sendResponse,
+  isUserAuthorized, errorLog, EmbedMessageType, sendResponse,
 } from '../../../util';
 
 export default {
@@ -52,12 +52,7 @@ export default {
         });
       }
     } else {
-      interaction.reply({
-        embeds: [returnEmbed('You do not have the permission to display Role Panels!', EmbedMessageType.Error)],
-        ephemeral: true,
-      }).catch((e) => {
-        errorLog('Could not send interaction message to user\n========================\n%O', e);
-      });
+      sendResponse(interaction, 'You do not have the permission to display Role Panels!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

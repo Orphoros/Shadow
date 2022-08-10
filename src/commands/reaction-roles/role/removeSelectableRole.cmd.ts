@@ -5,7 +5,7 @@ import {
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableRoleOption, SelectableRoleOption } from '../../../schemas';
 import {
-  errorLog, EmbedMessageType, returnCrashMsg, isUserAuthorized, sendResponse,
+  EmbedMessageType, isUserAuthorized, sendResponse, sendCrashResponse,
 } from '../../../util';
 
 export default {
@@ -34,13 +34,7 @@ export default {
           sendResponse(interaction, `Role <@&${role?.id}> is now removed from the selection!\n
           Remove the old panel and display a new panel to make this change affective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
-          errorLog('Could not delete selectable role option\n========================\n%O', e);
-          interaction.reply({
-            embeds: [returnCrashMsg(`Could not delete role <@&${role?.id}> from the remote database!`, e)],
-            ephemeral: true,
-          }).catch((e2) => {
-            errorLog('Could not send interaction message to user\n========================\n%O', e2);
-          });
+          sendCrashResponse(interaction, `Could not delete role <@&${role?.id}> from the remote database!`, e);
         });
       } else {
         sendResponse(interaction, `Cannot remove role <@&${role?.id}>! This role is not added to the selection!`, EmbedMessageType.Warning, 'Could not send interaction message to user');

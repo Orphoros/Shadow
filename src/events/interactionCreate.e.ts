@@ -4,7 +4,7 @@ import {
   SelectableColorRoleOption, ISelectableColorRoleOption,
 } from '../schemas';
 import {
-  EmbedMessageType, returnCrashMsg, errorLog, sendResponse,
+  EmbedMessageType, errorLog, returnCrashMsg, sendResponse,
 } from '../util';
 import { DiscordClient } from '../typings/client';
 

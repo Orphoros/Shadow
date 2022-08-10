@@ -5,7 +5,7 @@ import {
 import { DiscordClient } from '../typings/client';
 import { BotGuildConfig } from '../schemas';
 import {
-  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, sendResponse,
+  isUserAuthorized, errorLog, EmbedMessageType, sendResponse, sendCrashResponse,
 } from '../util';
 
 export default {
@@ -143,13 +143,7 @@ export default {
               sendResponse(interaction, `Welcome channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -168,13 +162,7 @@ export default {
               sendResponse(interaction, `Introduction channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -193,13 +181,7 @@ export default {
               sendResponse(interaction, `Rules channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -218,13 +200,7 @@ export default {
               sendResponse(interaction, `Announcements channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -246,13 +222,7 @@ export default {
               sendResponse(interaction, `Members counter channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -271,13 +241,7 @@ export default {
               sendResponse(interaction, `Main channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -296,13 +260,7 @@ export default {
               sendResponse(interaction, `Voice channel monitoring is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -315,13 +273,7 @@ export default {
               sendResponse(interaction, 'The new member welcome message has been set!', EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -340,13 +292,7 @@ export default {
               sendResponse(interaction, `User <@${userID}> has now full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
 
           break;
@@ -366,13 +312,7 @@ export default {
               sendResponse(interaction, `Users under role <@&${roleID}> have now full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -391,13 +331,7 @@ export default {
               sendResponse(interaction, `User <@${userID}> has no longer full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config\n========================\n%O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user\n========================\n%O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
 
           break;
@@ -417,13 +351,7 @@ export default {
               sendResponse(interaction, `Users under role <@&${roleID}> have no longer full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
-              interaction.reply({
-                embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
-                ephemeral: true,
-              }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
-              });
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
             });
           break;
         }
@@ -473,19 +401,13 @@ export default {
             embeds: [embed],
             ephemeral: true,
           }).catch((e) => {
-            errorLog('Could not send interaction message to user: %O', e);
+            errorLog('Could not send interaction message to user\n========================\n%O', e);
           });
           break;
         }
 
         default: {
-          errorLog('Bot config command handler found an unknown command request: %o', interaction.command);
-          interaction.reply({
-            embeds: [returnCrashMsg('An unrecognized command has been found!', `configBot.cmd.ts has received an unknown command: ${interaction.command}`)],
-            ephemeral: true,
-          }).catch((e2) => {
-            errorLog('Could not send interaction message to user\n========================\n%O', e2);
-          });
+          sendCrashResponse(interaction, 'An unrecognized command has been found!', `configBot.cmd.ts has received an unknown command: ${interaction.command}`);
           break;
         }
       }

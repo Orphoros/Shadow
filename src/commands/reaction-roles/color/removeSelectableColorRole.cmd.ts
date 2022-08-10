@@ -4,7 +4,7 @@ import {
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import {
-  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, sendResponse,
+  isUserAuthorized, EmbedMessageType, sendResponse, sendCrashResponse,
 } from '../../../util';
 import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
 
@@ -35,13 +35,7 @@ export default {
           sendResponse(interaction, `Color role <@&${role?.id}> is now removed from the color selection!\n
           Remove the old panel and display a new panel to make this change affective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
-          errorLog('Could not delete selectable color option\n========================\n%O', e);
-          interaction.reply({
-            embeds: [returnCrashMsg(`Could not delete color role <@&${role?.id}> from the remote database!`, e)],
-            ephemeral: true,
-          }).catch((e2) => {
-            errorLog('Could not send interaction message to user\n========================\n%O', e2);
-          });
+          sendCrashResponse(interaction, `Could not delete color role <@&${role?.id}> from the remote database!`, e);
         });
       } else {
         sendResponse(interaction, `Cannot remove color role <@&${role?.id}>! This role is not added to the color selection!`, EmbedMessageType.Warning, 'Could not send interaction message to user');

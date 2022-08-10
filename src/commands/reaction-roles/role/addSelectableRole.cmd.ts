@@ -4,7 +4,7 @@ import {
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import {
-  isUserAuthorized, EmbedMessageType, returnCrashMsg, errorLog, sendResponse,
+  isUserAuthorized, EmbedMessageType, sendResponse, sendCrashResponse,
 } from '../../../util';
 import { ISelectableRoleOption, SelectableRoleOption } from '../../../schemas';
 
@@ -55,13 +55,7 @@ export default {
           sendResponse(interaction, `Role <@&${role?.id}> is now added as a selectable role to the dropdown menu!\n
           Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
-          errorLog('Could not save selectable role option\n========================\n%O', e);
-          interaction.reply({
-            embeds: [returnCrashMsg(`Could not save role <@&${role?.id}> to the remote database!`, e)],
-            ephemeral: true,
-          }).catch((e2) => {
-            errorLog('Could not send interaction message to user\n========================\n%O', e2);
-          });
+          sendCrashResponse(interaction, `Could not save role <@&${role?.id}> to the remote database!`, e);
         });
       }
     } else {

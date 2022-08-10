@@ -5,7 +5,7 @@ import {
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
 import {
-  isUserAuthorized, EmbedMessageType, returnCrashMsg, errorLog, sendResponse,
+  isUserAuthorized, EmbedMessageType, sendResponse, sendCrashResponse,
 } from '../../../util';
 
 export default {
@@ -56,13 +56,7 @@ export default {
           sendResponse(interaction, `Color role <@&${role?.id}> is now added as a selectable color to the dropdown menu!\n
           Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
-          errorLog('Could not save selectable role color\n========================\n%O', e);
-          interaction.reply({
-            embeds: [returnCrashMsg(`Could not save color role <@&${role?.id}> to the remote database!`, e)],
-            ephemeral: true,
-          }).catch((e2) => {
-            errorLog('Could not send interaction message to user\n========================\n%O', e2);
-          });
+          sendCrashResponse(interaction, `Could not save color role <@&${role?.id}> to the remote database!`, e);
         });
       }
     } else {

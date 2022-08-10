@@ -5,7 +5,7 @@ import {
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { DiscordClient } from '../typings/client';
 import {
-  isUserAuthorized, errorLog, EmbedMessageType, returnEmbed, sendResponse,
+  isUserAuthorized, EmbedMessageType, sendResponse,
 } from '../util';
 
 export default {
@@ -18,12 +18,7 @@ export default {
       client.emit('guildMemberAdd', interaction.member as GuildMember);
       sendResponse(interaction, 'Simulated a user join with your user!', EmbedMessageType.Success, 'Could not send interaction message to user');
     } else {
-      interaction.reply({
-        embeds: [returnEmbed('You do not have permission to set the status of the bot.', EmbedMessageType.Error)],
-        ephemeral: true,
-      }).catch((e) => {
-        errorLog('Could not send interaction message to user\n========================\n%O', e);
-      });
+      sendResponse(interaction, 'You do not have permission to set the status of the bot.', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

@@ -9,7 +9,7 @@ export enum EmbedMessageType {
   Warning,
   Success
 }
-export function returnEmbed(msg: string, type: EmbedMessageType): MessageEmbed {
+function returnEmbed(msg: string, type: EmbedMessageType): MessageEmbed {
   switch (type) {
     case EmbedMessageType.Error:
       return new MessageEmbed()
@@ -64,5 +64,19 @@ export function sendResponse(
     ephemeral: true,
   }).catch((e) => {
     errorLog(`${errLog}\n========================\n%O`, e);
+  });
+}
+
+export function sendCrashResponse(
+  intr: CommandInteraction<CacheType> | SelectMenuInteraction<CacheType>,
+  message: string,
+  err: any,
+): void {
+  errorLog(`${message}\n========================\n%O`, err);
+  intr.reply({
+    embeds: [returnCrashMsg(message, err)],
+    ephemeral: true,
+  }).catch((e2) => {
+    errorLog('Could not send crash interaction message to user\n========================\n%O', e2);
   });
 }
