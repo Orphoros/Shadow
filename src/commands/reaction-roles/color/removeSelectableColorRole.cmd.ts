@@ -5,7 +5,7 @@ import {
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { isUserAuthorized } from '../../../util/mongoIO';
 import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../../../util/responseGiver';
-import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas/selectableColorRoleOption';
+import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
 import { errorLog } from '../../../util/dbg';
 
 export default {

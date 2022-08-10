@@ -1,7 +1,9 @@
 import { GuildMemberRoleManager, Interaction } from 'discord.js';
 import { errorLog } from '../util/dbg';
-import { ISelectableRoleOption, SelectableRoleOption } from '../schemas/selectableRoleOption';
-import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../schemas/selectableColorRoleOption';
+import {
+  ISelectableRoleOption, SelectableRoleOption,
+  SelectableColorRoleOption, ISelectableColorRoleOption,
+} from '../schemas';
 import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../util/responseGiver';
 import { DiscordClient } from '../typings/client';
 

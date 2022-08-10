@@ -7,7 +7,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../util/responseGiver';
 import { DiscordClient } from '../typings/client';
 import { errorLog } from '../util/dbg';
-import { BotStatusConfig } from '../schemas/botStatus';
+import { BotStatusConfig } from '../schemas';
 import { isUserAuthorized } from '../util/mongoIO';
 
 export default {

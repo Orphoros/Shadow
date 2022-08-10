@@ -4,7 +4,7 @@ import {
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { isUserAuthorized } from '../../../util/mongoIO';
-import { ISelectableRoleOption, SelectableRoleOption } from '../../../schemas/selectableRoleOption';
+import { ISelectableRoleOption, SelectableRoleOption } from '../../../schemas';
 import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../../../util/responseGiver';
 import { errorLog } from '../../../util/dbg';
 

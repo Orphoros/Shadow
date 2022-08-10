@@ -7,7 +7,7 @@ import { EmbedMessageType, returnEmbed } from '../util/responseGiver';
 import { DiscordClient } from '../typings/client';
 import { errorLog } from '../util/dbg';
 import { isUserAuthorized } from '../util/mongoIO';
-// TODO: remove this file before release
+
 export default {
   data: new SlashCommandBuilder()
     .setName('simulate-join')

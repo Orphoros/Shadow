@@ -2,7 +2,7 @@ import { ObjectId, Query } from 'mongoose';
 import {
   CacheType, CommandInteraction, Guild, GuildMemberRoleManager,
 } from 'discord.js';
-import { BotGuildConfig, IBotGuildConfig } from '../schemas/guildConfig';
+import { BotGuildConfig, IBotGuildConfig } from '../schemas';
 
 function getBotConfig(guildId: string)
 : Query<(IBotGuildConfig & { _id: ObjectId; })

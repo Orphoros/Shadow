@@ -1,7 +1,6 @@
 import { DiscordClient } from '../../typings/client';
 import { errorLog, eventLog } from '../../util/dbg';
-import { BotGuildConfig } from '../../schemas/guildConfig';
-import { SelectableRoleOption } from '../../schemas/selectableRoleOption';
+import { BotGuildConfig, SelectableRoleOption } from '../../schemas';
 
 export default (client: DiscordClient): void => {
   client.on('guildDelete', (guild) => {

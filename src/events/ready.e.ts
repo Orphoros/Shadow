@@ -3,7 +3,7 @@ import { PresenceStatusData } from 'discord.js';
 import { bootLog, errorLog } from '../util/dbg';
 import { DiscordClient } from '../typings/client';
 import shutdown from '../util/shutdown';
-import { IBotStatusConfig, BotStatusConfig } from '../schemas/botStatus';
+import { IBotStatusConfig, BotStatusConfig } from '../schemas';
 
 export default (client: DiscordClient): void => {
   client.on('ready', async () => {

@@ -1,6 +1,6 @@
 import { DiscordClient } from '../../typings/client';
 import { errorLog, eventLog } from '../../util/dbg';
-import { BotGuildConfig } from '../../schemas/guildConfig';
+import { BotGuildConfig } from '../../schemas';
 
 export default (client: DiscordClient): void => {
   client.on('guildCreate', async (guild) => {

@@ -5,7 +5,7 @@ import {
 import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../util/responseGiver';
 import { errorLog } from '../util/dbg';
 import { DiscordClient } from '../typings/client';
-import { BotGuildConfig } from '../schemas/guildConfig';
+import { BotGuildConfig } from '../schemas';
 import { isUserAuthorized } from '../util/mongoIO';
 
 export default {

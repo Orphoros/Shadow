@@ -3,7 +3,7 @@ import {
   CacheType, CommandInteraction,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas/selectableColorRoleOption';
+import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
 import { isUserAuthorized } from '../../../util/mongoIO';
 import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../../../util/responseGiver';
 import { errorLog } from '../../../util/dbg';

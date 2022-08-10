@@ -4,7 +4,7 @@ import {
   MessageEmbed, MessageSelectMenu,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas/selectableColorRoleOption';
+import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
 import { EmbedMessageType, returnEmbed } from '../../../util/responseGiver';
 import { errorLog } from '../../../util/dbg';
 import { isUserAuthorized } from '../../../util/mongoIO';
