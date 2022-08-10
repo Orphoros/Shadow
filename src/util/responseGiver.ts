@@ -1,4 +1,7 @@
-import { MessageEmbed } from 'discord.js';
+import {
+  CacheType, MessageEmbed, CommandInteraction, SelectMenuInteraction,
+} from 'discord.js';
+import { errorLog } from '.';
 
 export enum EmbedMessageType {
   Error,
@@ -48,4 +51,18 @@ export function returnCrashMsg(
       { name: 'Developer debug info', value: `\`\`\`\n${err ?? 'None provided'}\`\`\``, inline: true },
     )
     .setTimestamp();
+}
+
+export function sendResponse(
+  intr: CommandInteraction<CacheType> | SelectMenuInteraction<CacheType>,
+  message: string,
+  type: EmbedMessageType,
+  errLog: string,
+): void {
+  intr.reply({
+    embeds: [returnEmbed(message, type)],
+    ephemeral: true,
+  }).catch((e) => {
+    errorLog(`${errLog}\n========================\n%O`, e);
+  });
 }

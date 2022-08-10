@@ -7,7 +7,7 @@ import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { DiscordClient } from '../typings/client';
 import { BotStatusConfig } from '../schemas';
 import {
-  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, returnEmbed,
+  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, sendResponse,
 } from '../util';
 
 export default {
@@ -87,29 +87,19 @@ export default {
         .then(() => {
           client.user?.setStatus(type);
           client.user?.setActivity(statusMsg!, { type: activity });
-          interaction.reply({
-            embeds: [returnEmbed(`Bot status is now ${type} with message: ${activityName} ${statusMsg}`, EmbedMessageType.Info)],
-            ephemeral: true,
-          }).catch((e) => {
-            errorLog('Could not send interaction message to user: %O', e);
-          });
+          sendResponse(interaction, `Bot status is now ${type} with message: ${activityName} ${statusMsg}`, EmbedMessageType.Info, 'Could not send interaction message to user');
         })
         .catch((e) => {
-          errorLog('Could not save the bot status config: %O', e);
+          errorLog('Could not save the bot status config\n========================\n%O', e);
           interaction.reply({
             embeds: [returnCrashMsg('Could not set the new bot status with the database!', e)],
             ephemeral: true,
           }).catch((e2) => {
-            errorLog('Could not send interaction message to user: %O', e2);
+            errorLog('Could not send interaction message to user\n========================\n%O', e2);
           });
         });
     } else {
-      interaction.reply({
-        embeds: [returnEmbed('You do not have permission to set the status of the bot.', EmbedMessageType.Error)],
-        ephemeral: true,
-      }).catch((e) => {
-        errorLog('Could not send interaction message to user: %O', e);
-      });
+      sendResponse(interaction, 'You do not have permission to set the status of the bot.', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

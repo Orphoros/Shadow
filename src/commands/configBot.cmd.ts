@@ -5,7 +5,7 @@ import {
 import { DiscordClient } from '../typings/client';
 import { BotGuildConfig } from '../schemas';
 import {
-  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, returnEmbed,
+  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, sendResponse,
 } from '../util';
 
 export default {
@@ -131,38 +131,24 @@ export default {
       switch (command) {
         case 'set.welcome-channel': {
           const channelID = interaction.options.getChannel('welcome-channel')?.id;
-
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
           if (!cnl) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not set this channel for the welcome message channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e2) => {
-              errorLog('Could not send interaction message to user: %O', e2);
-            });
+            sendResponse(interaction, 'Could not set this channel for the welcome message channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
-
-          const update = {
-            welcome_channel_id: channelID,
-          };
+          const update = { welcome_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Welcome channel is now configured to <#${channelID}>`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Welcome channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -170,38 +156,24 @@ export default {
 
         case 'set.introduction-channel': {
           const channelID = interaction.options.getChannel('introduction-channel')?.id;
-
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
           if (!cnl) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not set this channel for the introduction channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e2) => {
-              errorLog('Could not send interaction message to user: %O', e2);
-            });
+            sendResponse(interaction, 'Could not set this channel for the introduction channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
-
-          const update = {
-            introduction_channel_id: channelID,
-          };
+          const update = { introduction_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Introduction channel is now configured to <#${channelID}>`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Introduction channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -209,38 +181,24 @@ export default {
 
         case 'set.rules-channel': {
           const channelID = interaction.options.getChannel('rules-channel')?.id;
-
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
           if (!cnl) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not set this channel for the rules channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e2) => {
-              errorLog('Could not send interaction message to user: %O', e2);
-            });
+            sendResponse(interaction, 'Could not set this channel for the rules channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
-
-          const update = {
-            rules_channel_id: channelID,
-          };
+          const update = { rules_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Rules channel is now configured to <#${channelID}>`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Rules channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -248,38 +206,24 @@ export default {
 
         case 'set.announcements-channel': {
           const channelID = interaction.options.getChannel('announcements-channel')?.id;
-
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && (c.type === 'GUILD_TEXT' || c.type === 'GUILD_NEWS') && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
           if (!cnl) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not set this channel for the announcements channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e2) => {
-              errorLog('Could not send interaction message to user: %O', e2);
-            });
+            sendResponse(interaction, 'Could not set this channel for the announcements channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
-
-          const update = {
-            announcement_channel_id: channelID,
-          };
+          const update = { announcement_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Announcement channel is now configured to <#${channelID}>`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Announcements channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -287,42 +231,27 @@ export default {
 
         case 'set.members-counter-channel': {
           const channelID = interaction.options.getChannel('vc')?.id;
-
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && c.type === 'GUILD_VOICE');
           if (!cnl) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not set this channel for the displaying member count! Channel needs to be a voice channel and the bot must be able to rename it!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e2) => {
-              errorLog('Could not send interaction message to user: %O', e2);
-            });
+            sendResponse(interaction, 'Could not set this channel for the members counter channel! Channel needs to be a voice channel and the bot must be able to join it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
-
-          const update = {
-            members_count_channel_id: channelID,
-          };
+          const update = { members_count_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
               cnl?.setName(`Member count: ${interaction.guild?.members.cache.filter((m) => !m.user.bot).size}`).catch((e) => {
-                errorLog('Could not set member count: %O', e);
+                errorLog('Could not set member count\n========================\n%O', e);
               });
-
-              interaction.reply({
-                embeds: [returnEmbed(`Members count is now set to be displayed on channel <#${channelID}>! \n\n Make sure the bot has the permission to rename this channel!`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Members counter channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -330,38 +259,24 @@ export default {
 
         case 'set.main-channel': {
           const channelID = interaction.options.getChannel('general-channel')?.id;
-
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
           if (!cnl) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not set this channel for the main message channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e2) => {
-              errorLog('Could not send interaction message to user: %O', e2);
-            });
+            sendResponse(interaction, 'Could not set this channel for the main channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
-
-          const update = {
-            main_channel_id: channelID,
-          };
+          const update = { main_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Main channel is now configured to <#${channelID}>`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Main channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -369,38 +284,24 @@ export default {
 
         case 'set.auto-vc': {
           const channelID = interaction.options.getChannel('vc')?.id;
-
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && c.type === 'GUILD_VOICE');
           if (!cnl) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not set this channel for auto voice channel monitoring! The channel needs to be a voice channel and the bot must be able to create new voice channels there!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e2) => {
-              errorLog('Could not send interaction message to user: %O', e2);
-            });
+            sendResponse(interaction, 'Could not set this channel for auto voice channel monitoring! The channel needs to be a voice channel and the bot must be able to create new voice channels there!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
-
-          const update = {
-            auto_vc_channel_id: channelID,
-          };
+          const update = { auto_vc_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Voice channel monitoring is now configured to <#${channelID}>`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Voice channel monitoring is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -408,26 +309,18 @@ export default {
 
         case 'set.welcome-message': {
           const msg = interaction.options.getString('welcome-message');
-
-          const update = {
-            welcome_message: msg,
-          };
+          const update = { welcome_message: msg };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed('The new member welcome message has been set!', EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, 'The new member welcome message has been set!', EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -435,39 +328,24 @@ export default {
 
         case 'add.admin-user': {
           const userID = interaction.options.getUser('user')?.id;
-
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_users: userID }, { 'admin_users.$': 1 });
-
           if (array.length > 0) {
-            interaction.reply({
-              embeds: [returnEmbed(`User <@${userID}> is already an admin`, EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e) => {
-              errorLog('Could not send interaction message to user: %O', e);
-            });
+            sendResponse(interaction, `User <@${userID}> is already an admin`, EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
-
-          const update = {
-            $push: { admin_users: userID },
-          };
+          const update = { $push: { admin_users: userID } };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`User <@${userID}> has now full access to this bot!`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `User <@${userID}> has now full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
 
@@ -476,39 +354,24 @@ export default {
 
         case 'add.admin-role': {
           const roleID = interaction.options.getRole('role')?.id;
-          const update = {
-            $push: { admin_roles: roleID },
-          };
-
+          const update = { $push: { admin_roles: roleID } };
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_roles: roleID }, { 'admin_roles.$': 1 });
-
           if (array.length > 0) {
-            interaction.reply({
-              embeds: [returnEmbed(`Users under role <@&${roleID}> are already an admin`, EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e) => {
-              errorLog('Could not send interaction message to user: %O', e);
-            });
+            sendResponse(interaction, `Users under role <@&${roleID}> are already an admin`, EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
-
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Users under role <@&${roleID}> have now full access to this bot!`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Users under role <@&${roleID}> have now full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
           break;
@@ -516,39 +379,24 @@ export default {
 
         case 'remove.admin-user': {
           const userID = interaction.options.getUser('user')?.id;
-
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_users: userID }, { 'admin_users.$': 1 });
-
           if (array.length === 0) {
-            interaction.reply({
-              embeds: [returnEmbed(`User <@${userID}> does not exist in the config!`, EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e) => {
-              errorLog('Could not send interaction message to user: %O', e);
-            });
+            sendResponse(interaction, `User <@${userID}> does not exist in the config!`, EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
-
-          const update = {
-            $pull: { admin_users: userID },
-          };
+          const update = { $pull: { admin_users: userID } };
           BotGuildConfig.updateOne(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`User <@${userID}> has removed from the admin bot config!`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `User <@${userID}> has no longer full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
-              errorLog('Could not save the new bot config: %O', e);
+              errorLog('Could not save the new bot config\n========================\n%O', e);
               interaction.reply({
                 embeds: [returnCrashMsg('Could not set the new bot config with the database!', e)],
                 ephemeral: true,
               }).catch((e2) => {
-                errorLog('Could not send interaction message to user: %O', e2);
+                errorLog('Could not send interaction message to user\n========================\n%O', e2);
               });
             });
 
@@ -557,31 +405,16 @@ export default {
 
         case 'remove.admin-role': {
           const roleID = interaction.options.getRole('role')?.id;
-          const update = {
-            $pull: { admin_roles: roleID },
-          };
-
+          const update = { $pull: { admin_roles: roleID } };
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_roles: roleID }, { 'admin_roles.$': 1 });
-
           if (array.length === 0) {
-            interaction.reply({
-              embeds: [returnEmbed(`Role <@&${roleID}> is not configured! Cannot remove it!`, EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e) => {
-              errorLog('Could not send interaction message to user: %O', e);
-            });
+            sendResponse(interaction, `Role <@&${roleID}> is not configured! Cannot remove it!`, EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
-
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              interaction.reply({
-                embeds: [returnEmbed(`Users under role <@&${roleID}> are now removed from the admin bot config list`, EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, `Users under role <@&${roleID}> have no longer full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
             })
             .catch((e) => {
               errorLog('Could not save the new bot config: %O', e);
@@ -597,17 +430,10 @@ export default {
 
         case 'show.config': {
           const config = await BotGuildConfig.findOne(query);
-
           if (!config) {
-            interaction.reply({
-              embeds: [returnEmbed('Could not find configuration for this server!', EmbedMessageType.Error)],
-              ephemeral: true,
-            }).catch((e) => {
-              errorLog('Could not send interaction message to user: %O', e);
-            });
+            sendResponse(interaction, 'This bot is not configured for this server!', EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
-
           const embed = new MessageEmbed()
             .setAuthor({ name: `${client.user?.username}`, iconURL: `${client.user?.displayAvatarURL()}` })
             .setTitle('Bot Configuration')
@@ -643,14 +469,12 @@ export default {
             __Welcome message:__
             >>> ${(!config.welcome_message) ? '*None*' : config.welcome_message.replaceAll('\\n', '\n')}
             `);
-
           interaction.reply({
             embeds: [embed],
             ephemeral: true,
           }).catch((e) => {
             errorLog('Could not send interaction message to user: %O', e);
           });
-
           break;
         }
 
@@ -660,18 +484,13 @@ export default {
             embeds: [returnCrashMsg('An unrecognized command has been found!', `configBot.cmd.ts has received an unknown command: ${interaction.command}`)],
             ephemeral: true,
           }).catch((e2) => {
-            errorLog('Could not send interaction message to user: %O', e2);
+            errorLog('Could not send interaction message to user\n========================\n%O', e2);
           });
           break;
         }
       }
     } else {
-      interaction.reply({
-        embeds: [returnEmbed('You do not have permission to configure this bot!', EmbedMessageType.Error)],
-        ephemeral: true,
-      }).catch((e) => {
-        errorLog('Could not send interaction message to user: %O', e);
-      });
+      sendResponse(interaction, 'You do not have permission to configure this bot!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

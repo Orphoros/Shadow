@@ -4,7 +4,7 @@ import {
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import {
-  isUserAuthorized, EmbedMessageType, returnCrashMsg, returnEmbed, errorLog,
+  isUserAuthorized, EmbedMessageType, returnCrashMsg, errorLog, sendResponse,
 } from '../../../util';
 import { ISelectableRoleOption, SelectableRoleOption } from '../../../schemas';
 
@@ -38,23 +38,13 @@ export default {
       }).exec();
 
       if (roleOption !== null) {
-        interaction.reply({
-          embeds: [returnEmbed(`Role <@&${role?.id}> is already added to the selection!`, EmbedMessageType.Error)],
-          ephemeral: true,
-        }).catch((e) => {
-          errorLog('Could not send interaction message to user: %O', e);
-        });
+        sendResponse(interaction, `Role <@&${role?.id}> is already added to the role selection!`, EmbedMessageType.Error, 'Could not send interaction message to user');
         return;
       }
 
       if (role!.position >= interaction.guild!.me!.roles.highest.position) {
-        interaction.reply({
-          embeds: [returnEmbed(`Not possible add <@&${role?.id}> to the selection at the moment!\n
-          The bot can only work with roles that are below its permission level!`, EmbedMessageType.Warning)],
-          ephemeral: true,
-        }).catch((e) => {
-          errorLog('Could not send interaction message to user: %O', e);
-        });
+        sendResponse(interaction, `Not possible add <@&${role?.id}> to the selection at the moment!\n
+        The bot can only work with roles that are below its permission level!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       } else {
         await new SelectableRoleOption({
           role_id: role?.id,
@@ -62,30 +52,20 @@ export default {
           role_description: description ?? undefined,
           role_emoji: emoji ?? undefined,
         }).save().then(() => {
-          interaction.reply({
-            embeds: [returnEmbed(`Role <@&${role?.id}> is now added as a selectable role to the dropdown menu!\n
-            Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success)],
-            ephemeral: true,
-          }).catch((e) => {
-            errorLog('Could not send interaction message to user: %O', e);
-          });
+          sendResponse(interaction, `Role <@&${role?.id}> is now added as a selectable role to the dropdown menu!\n
+          Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
-          errorLog('Could not save selectable role option: %O', e);
+          errorLog('Could not save selectable role option\n========================\n%O', e);
           interaction.reply({
             embeds: [returnCrashMsg(`Could not save role <@&${role?.id}> to the remote database!`, e)],
             ephemeral: true,
           }).catch((e2) => {
-            errorLog('Could not send interaction message to user: %O', e2);
+            errorLog('Could not send interaction message to user\n========================\n%O', e2);
           });
         });
       }
     } else {
-      interaction.reply({
-        embeds: [returnEmbed('You cannot add roles to the role selection panel!', EmbedMessageType.Error)],
-        ephemeral: true,
-      }).catch((e) => {
-        errorLog('Could not send interaction message to user: %O', e);
-      });
+      sendResponse(interaction, 'You are not authorized to add roles to the role selection panel!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

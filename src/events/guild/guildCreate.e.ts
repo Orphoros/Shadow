@@ -28,7 +28,7 @@ export default (client: DiscordClient): void => {
       })
       .catch((e) => {
         eventLog(`Could not update main channel and admin user config for guild ${guild.name} (${guild.id})`);
-        errorLog('DB error: %O', e);
+        errorLog('DB error\n========================\n%O', e);
       });
   });
 };

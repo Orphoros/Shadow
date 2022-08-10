@@ -4,7 +4,7 @@ import {
   SelectableColorRoleOption, ISelectableColorRoleOption,
 } from '../schemas';
 import {
-  EmbedMessageType, returnCrashMsg, returnEmbed, errorLog,
+  EmbedMessageType, returnCrashMsg, errorLog, sendResponse,
 } from '../util';
 import { DiscordClient } from '../typings/client';
 
@@ -22,63 +22,39 @@ export default (client: DiscordClient): void => {
         switch (interaction.customId) {
           case 'reaction-roles': {
             const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
-
             const roleOptions: ISelectableRoleOption[] = await SelectableRoleOption.find({
               guild_id: interaction.guild?.id,
             }).exec();
-
             roleOptions.forEach((r) => {
               if (memberRoles.cache.has(r.role_id)) {
                 memberRoles.remove(r.role_id);
               }
             });
-
             if (interaction.values.length === 0) {
-              interaction.reply({
-                embeds: [returnEmbed('Your roles have been cleared!', EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, 'Your roles have been cleared!', EmbedMessageType.Success, 'Could not send interaction message to user');
               return;
             }
-
             let errFlag = false;
             interaction.values.forEach((r) => {
               memberRoles.add(r).catch(() => {
                 errFlag = true;
               });
             });
-
             if (errFlag) {
-              interaction.reply({
-                embeds: [returnEmbed('Could not update all the roles for you!', EmbedMessageType.Warning)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, 'Could not update all the roles for you!', EmbedMessageType.Warning, 'Could not send interaction message to user');
             } else {
-              interaction.reply({
-                embeds: [returnEmbed('Your role selection have been updated!', EmbedMessageType.Success)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, 'Your role selection have been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
             }
-
             break;
           }
 
           case 'reaction-colors': {
             const roleID = interaction.values[0];
             const role = interaction.guild?.roles.cache.get(roleID);
-
             const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
-
             const roleOptions: ISelectableColorRoleOption[] = await SelectableColorRoleOption.find({
               guild_id: interaction.guild?.id,
             }).exec();
-
             roleOptions.forEach((r) => {
               if (memberRoles.cache.has(r.color_role_id)) {
                 memberRoles.remove(r.color_role_id);
@@ -86,28 +62,13 @@ export default (client: DiscordClient): void => {
             });
 
             if (roleID === '-1') {
-              interaction.reply({
-                embeds: [returnEmbed('Your selectable color roles have been cleared!', EmbedMessageType.Info)],
-                ephemeral: true,
-              }).catch((e) => {
-                errorLog('Could not send interaction message to user: %O', e);
-              });
+              sendResponse(interaction, 'Your selectable color roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
             } else {
               memberRoles.add(roleID)
                 .then(() => {
-                  interaction.reply({
-                    embeds: [returnEmbed(`The color <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success)],
-                    ephemeral: true,
-                  }).catch((e) => {
-                    errorLog('Could not send interaction message to user: %O', e);
-                  });
+                  sendResponse(interaction, `The color <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
                 }).catch(() => {
-                  interaction.reply({
-                    embeds: [returnEmbed(`Does not have the permission to assign <@&${role?.id}> to you!`, EmbedMessageType.Error)],
-                    ephemeral: true,
-                  }).catch((e2) => {
-                    errorLog('Could not send interaction message to user: %O', e2);
-                  });
+                  sendResponse(interaction, `Does not have the permission to assign <@&${role?.id}> to you!`, EmbedMessageType.Error, 'Could not send interaction message to user');
                 });
             }
             break;
@@ -121,7 +82,7 @@ export default (client: DiscordClient): void => {
       await interaction.channel?.send({
         embeds: [returnCrashMsg('The bot could not execute a slash command!', err)],
       }).catch((e) => {
-        errorLog('Could not send interaction message to user: %O', e);
+        errorLog('Could not send interaction message to user\n========================\n%O', e);
       });
     }
   });

@@ -7,7 +7,7 @@ export default (client: DiscordClient): void => {
     const c = member.guild.channels.cache.get(memberCountChannelId ?? '');
 
     c?.setName(`Member count: ${member.guild.members.cache.filter((m) => !m.user.bot).size}`).catch((e) => {
-      errorLog('Could not set member count: %O', e);
+      errorLog('Could not set member count\n========================\n%O', e);
     });
   });
 };

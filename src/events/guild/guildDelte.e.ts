@@ -15,7 +15,7 @@ export default (client: DiscordClient): void => {
       })
       .catch((e) => {
         eventLog(`Could not remove guild config for "${guild.name}" (${guild.id})`);
-        errorLog('DB error: %O', e);
+        errorLog('DB error\n========================\n%O', e);
       });
 
     SelectableRoleOption.deleteMany({ guild_id: guild?.id })
@@ -24,7 +24,7 @@ export default (client: DiscordClient): void => {
       })
       .catch((e) => {
         eventLog(`Could not remove guild selectable role options for "${guild.name}" (${guild.id})`);
-        errorLog('DB error: %O', e);
+        errorLog('DB error\n========================\n%O', e);
       });
   });
 };

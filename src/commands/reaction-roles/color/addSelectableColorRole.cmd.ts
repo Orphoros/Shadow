@@ -5,7 +5,7 @@ import {
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
 import {
-  isUserAuthorized, EmbedMessageType, returnCrashMsg, returnEmbed, errorLog,
+  isUserAuthorized, EmbedMessageType, returnCrashMsg, errorLog, sendResponse,
 } from '../../../util';
 
 export default {
@@ -39,23 +39,13 @@ export default {
         }).exec();
 
       if (roleOption !== null) {
-        interaction.reply({
-          embeds: [returnEmbed(`Color role <@&${role?.id}> is already added to the color selection!`, EmbedMessageType.Error)],
-          ephemeral: true,
-        }).catch((e) => {
-          errorLog('Could not send interaction message to user: %O', e);
-        });
+        sendResponse(interaction, `Color role <@&${role?.id}> is already added to the color selection!`, EmbedMessageType.Error, 'Could not send interaction message to user');
         return;
       }
 
       if (role!.position >= interaction.guild!.me!.roles.highest.position) {
-        interaction.reply({
-          embeds: [returnEmbed(`Not possible add color role <@&${role?.id}> to the color selection at the moment!\n
-          The bot can only work with roles that are below its permission level!`, EmbedMessageType.Warning)],
-          ephemeral: true,
-        }).catch((e) => {
-          errorLog('Could not send interaction message to user: %O', e);
-        });
+        sendResponse(interaction, `Not possible to add color role <@&${role?.id}> to the color selection at the moment!\n
+        The bot can only work with roles that are below its permission level!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       } else {
         await new SelectableColorRoleOption({
           color_role_id: role?.id,
@@ -63,30 +53,20 @@ export default {
           color_description: colorName ?? undefined,
           color_emoji: colorEmoji ?? undefined,
         }).save().then(() => {
-          interaction.reply({
-            embeds: [returnEmbed(`Color role <@&${role?.id}> is now added as a selectable color to the dropdown menu!\n
-            Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success)],
-            ephemeral: true,
-          }).catch((e) => {
-            errorLog('Could not send interaction message to user: %O', e);
-          });
+          sendResponse(interaction, `Color role <@&${role?.id}> is now added as a selectable color to the dropdown menu!\n
+          Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
-          errorLog('Could not save selectable color role option: %O', e);
+          errorLog('Could not save selectable role color\n========================\n%O', e);
           interaction.reply({
             embeds: [returnCrashMsg(`Could not save color role <@&${role?.id}> to the remote database!`, e)],
             ephemeral: true,
           }).catch((e2) => {
-            errorLog('Could not send interaction message to user: %O', e2);
+            errorLog('Could not send interaction message to user\n========================\n%O', e2);
           });
         });
       }
     } else {
-      interaction.reply({
-        embeds: [returnEmbed('You cannot add color roles to the color selection panel!', EmbedMessageType.Error)],
-        ephemeral: true,
-      }).catch((e) => {
-        errorLog('Could not send interaction message to user: %O', e);
-      });
+      sendResponse(interaction, 'You cannot add color roles to the color selection panel!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

@@ -40,13 +40,13 @@ export default (client: DiscordClient): void => {
       .get(await getWelcomeChannelId(member.guild.id) ?? '') as TextChannel;
     const resDir = path.resolve('./resources');
     channel.send({ embeds: [welcomeEmbed], files: [`${resDir}/wp_banner.png`] }).catch((e) => {
-      errorLog('Could not send message to user: %O', e);
+      errorLog('Could not send message to user\n========================\n%O', e);
     });
 
     const c = member.guild.channels.cache.get(memberCountChannelId ?? '');
 
     c?.setName(`Member count: ${member.guild.members.cache.filter((m) => !m.user.bot).size}`).catch((e) => {
-      errorLog('Could not set member count: %O', e);
+      errorLog('Could not set member count\n========================\n%O', e);
     });
   });
 };

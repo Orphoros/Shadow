@@ -6,7 +6,7 @@ import {
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
 import {
-  errorLog, isUserAuthorized, returnEmbed, EmbedMessageType,
+  errorLog, isUserAuthorized, EmbedMessageType, sendResponse,
 } from '../../../util';
 
 export default {
@@ -21,14 +21,9 @@ export default {
       }).exec();
 
       if (roleOptions.length === 0) {
-        interaction.reply({
-          embeds: [returnEmbed(`There are no colors added to the color selection! 
-          Cannot display the panel till there are roles added to the color selection list.
-          First add some roles to the panel by slash commands!`, EmbedMessageType.Error)],
-          ephemeral: true,
-        }).catch((e) => {
-          errorLog('Could not send interaction message to user: %O', e);
-        });
+        sendResponse(interaction, `There are no colors added to the color selection! 
+        Cannot display the panel till there are roles added to the color selection list.
+        First add some roles to the panel by slash commands!`, EmbedMessageType.Error, 'Could not send interaction message to user');
       } else {
         const options = roleOptions.map((r) => ({
           label: interaction.guild?.roles.cache.get(r.color_role_id)?.name ?? 'Unknown',
@@ -55,26 +50,16 @@ export default {
             .addOptions(options)
             .setPlaceholder('Select a color')),
         ];
-        interaction.reply({
-          embeds: [returnEmbed('Color panel displayed successfully!', EmbedMessageType.Success)],
-          ephemeral: true,
-        }).catch((e) => {
-          errorLog('Could not send interaction message to user: %O', e);
-        });
+        sendResponse(interaction, 'Color panel displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({
           embeds: [panelMsg],
           components,
         }).catch((e) => {
-          errorLog('Could not send interaction message to user: %O', e);
+          errorLog('Could not send interaction message to user\n========================\n%O', e);
         });
       }
     } else {
-      interaction.reply({
-        embeds: [returnEmbed('You do not have the permission to display Color Role Panels!', EmbedMessageType.Error)],
-        ephemeral: true,
-      }).catch((e) => {
-        errorLog('Could not send interaction message to user: %O', e);
-      });
+      sendResponse(interaction, 'You do not have the permission to display Color Role Panels!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };
