@@ -1,5 +1,5 @@
 import { DiscordClient } from '../../typings/client';
-import { errorLog, eventLog } from '../../util/dbg';
+import { errorLog, eventLog } from '../../util';
 import { BotGuildConfig } from '../../schemas';
 
 export default (client: DiscordClient): void => {

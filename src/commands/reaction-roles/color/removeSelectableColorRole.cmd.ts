@@ -3,10 +3,10 @@ import {
   CacheType, CommandInteraction,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { isUserAuthorized } from '../../../util/mongoIO';
-import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../../../util/responseGiver';
+import {
+  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, returnEmbed,
+} from '../../../util';
 import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
-import { errorLog } from '../../../util/dbg';
 
 export default {
   data: new SlashCommandBuilder()

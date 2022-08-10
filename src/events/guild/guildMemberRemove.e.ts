@@ -1,6 +1,5 @@
-import { getMembersCountChannelID } from '../../util/mongoIO';
 import { DiscordClient } from '../../typings/client';
-import { errorLog } from '../../util/dbg';
+import { errorLog, getMembersCountChannelID } from '../../util';
 
 export default (client: DiscordClient): void => {
   client.on('guildMemberRemove', async (member) => {

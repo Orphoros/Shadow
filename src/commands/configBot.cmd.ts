@@ -2,11 +2,11 @@ import { SlashCommandBuilder } from '@discordjs/builders';
 import {
   CacheType, CommandInteraction, MessageEmbed,
 } from 'discord.js';
-import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../util/responseGiver';
-import { errorLog } from '../util/dbg';
 import { DiscordClient } from '../typings/client';
 import { BotGuildConfig } from '../schemas';
-import { isUserAuthorized } from '../util/mongoIO';
+import {
+  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, returnEmbed,
+} from '../util';
 
 export default {
   data: new SlashCommandBuilder()

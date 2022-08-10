@@ -4,11 +4,11 @@ import {
 } from 'discord.js';
 import { ActivityTypes } from 'discord.js/typings/enums';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
-import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../util/responseGiver';
 import { DiscordClient } from '../typings/client';
-import { errorLog } from '../util/dbg';
 import { BotStatusConfig } from '../schemas';
-import { isUserAuthorized } from '../util/mongoIO';
+import {
+  isUserAuthorized, errorLog, EmbedMessageType, returnCrashMsg, returnEmbed,
+} from '../util';
 
 export default {
   data: new SlashCommandBuilder()

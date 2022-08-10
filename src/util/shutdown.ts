@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import { DiscordClient } from '../typings/client';
-import { appLog } from '../util/dbg';
+import { appLog } from '../util';
 
 export default function shutdown(client: DiscordClient, exitCode?: number): void {
   appLog('Shutting down...');

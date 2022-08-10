@@ -1,6 +1,5 @@
-import { errorLog } from '../util/dbg';
 import { DiscordClient } from '../typings/client';
-import { getAutoVoiceChannelId } from '../util/mongoIO';
+import { getAutoVoiceChannelId, errorLog } from '../util';
 
 export default (client: DiscordClient): void => {
   client.on('voiceStateUpdate', async (oldState, newState) => {

@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
 import { PresenceStatusData } from 'discord.js';
-import { bootLog, errorLog } from '../util/dbg';
 import { DiscordClient } from '../typings/client';
-import shutdown from '../util/shutdown';
+import { shutdown, bootLog, errorLog } from '../util';
 import { IBotStatusConfig, BotStatusConfig } from '../schemas';
 
 export default (client: DiscordClient): void => {

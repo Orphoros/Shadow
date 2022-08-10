@@ -2,11 +2,10 @@ import { MessageEmbed, TextChannel } from 'discord.js';
 import path from 'path';
 import {
   getIntroductionChannelId, getMainChannelId,
-  getMembersCountChannelID,
+  getMembersCountChannelID, errorLog,
   getRulesChannelId, getWelcomeChannelId, getWelcomeMessage,
-} from '../../util/mongoIO';
+} from '../../util';
 import { DiscordClient } from '../../typings/client';
-import { errorLog } from '../../util/dbg';
 
 // IMPORTANT: Needs "Presence intent" and "Server members intent" permission
 export default (client: DiscordClient): void => {

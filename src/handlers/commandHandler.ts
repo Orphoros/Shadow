@@ -1,7 +1,6 @@
 import { ApplicationCommandDataResolvable, Collection } from 'discord.js';
-import { bootCommandLog, errorLog } from '../util/dbg';
+import { bootCommandLog, errorLog, getFiles } from '../util';
 import { DiscordClient } from '../typings/client';
-import getFiles from '../util/getFiles';
 
 export default async (client: DiscordClient) => {
   if (!client.user || !client.application) {

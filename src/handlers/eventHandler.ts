@@ -1,6 +1,7 @@
-import { bootEventLog, bootLog, errorLog } from '../util/dbg';
+import {
+  bootEventLog, bootLog, errorLog, getFiles,
+} from '../util';
 import { DiscordClient } from '../typings/client';
-import getFiles from '../util/getFiles';
 
 export default (client: DiscordClient) => {
   bootLog('Loading events...');

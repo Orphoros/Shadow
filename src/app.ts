@@ -2,7 +2,7 @@ import { Client, Intents } from 'discord.js';
 import * as dotenv from 'dotenv';
 import { DiscordClient } from './typings/client';
 import eventHandler from './handlers/eventHandler';
-import { bootLog } from './util/dbg';
+import { bootLog } from './util';
 
 dotenv.config();
 

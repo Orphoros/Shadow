@@ -4,9 +4,9 @@ import {
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableColorRoleOption, SelectableColorRoleOption } from '../../../schemas';
-import { isUserAuthorized } from '../../../util/mongoIO';
-import { EmbedMessageType, returnCrashMsg, returnEmbed } from '../../../util/responseGiver';
-import { errorLog } from '../../../util/dbg';
+import {
+  isUserAuthorized, EmbedMessageType, returnCrashMsg, returnEmbed, errorLog,
+} from '../../../util';
 
 export default {
   data: new SlashCommandBuilder()
