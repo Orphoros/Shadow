@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import { PresenceStatusData } from 'discord.js';
+import { initAutoVCHandler } from '../handlers/autoVCHandler';
 import { DiscordClient } from '../typings/client';
 import { shutdown, bootLog, errorLog } from '../util';
 import { IBotStatusConfig, BotStatusConfig } from '../schemas';
@@ -31,6 +32,8 @@ export default (client: DiscordClient): void => {
       });
 
     try {
+      initAutoVCHandler(client);
+      bootLog('AutoVCHandler initialized!');
       // eslint-disable-next-line global-require, @typescript-eslint/no-var-requires
       let commandHandler = require('../handlers/commandHandler');
       if (commandHandler.default) commandHandler = commandHandler.default;
