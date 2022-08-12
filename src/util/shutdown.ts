@@ -8,7 +8,7 @@ export default function shutdown(client: DiscordClient, exitCode?: number): void
   mongoose.connection.close().then(() => {
     appLog('Disconnected from MongoDB!');
   }).catch((e) => {
-    appLog('Could not disconnect from MongoDB: %O', e);
+    appLog('Could not disconnect from MongoDB\n========================\n%O', e);
   });
   process.exit(exitCode ?? 0);
 }

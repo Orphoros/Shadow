@@ -21,7 +21,7 @@ export default async (client: DiscordClient) => {
     if (devGuild && devGuild.commands && process.env.ENV === 'development') {
       await devGuild.commands.set([])
         .then(() => bootCommandLog('Cleared development registered commands!'))
-        .catch((e) => errorLog('Could not clear registered commands for the guild: %O', e));
+        .catch((e) => errorLog('Could not clear registered commands for the guild\n========================\n%O', e));
     }
   }
 
@@ -53,12 +53,12 @@ export default async (client: DiscordClient) => {
       client.application.commands
         .set(commands)
         .then(() => bootCommandLog('Registered commands for production'))
-        .catch((e) => errorLog('Could not register commands for production: %O', e));
+        .catch((e) => errorLog('Could not register commands for production\n========================\n%O', e));
     } else if (process.env.DEV_GUILD_ID && process.env.ENV === 'development') {
       client.application.commands
         .set(commands, process.env.DEV_GUILD_ID)
         .then(() => bootCommandLog('Registered commands for development'))
-        .catch((e) => errorLog('Could not register commands for development: %O', e));
+        .catch((e) => errorLog('Could not register commands for development\n========================\n%O', e));
     } else {
       errorLog('Could not register commands: No environment set');
     }

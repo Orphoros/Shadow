@@ -21,7 +21,7 @@ const getFiles = (dir: string, suffix: string): string[] => {
     }
     return commandFiles;
   } catch (e) {
-    errorLog('Cannot read in files: %O', e);
+    errorLog('Cannot read in files\n========================\n%O', e);
     return [];
   }
 };

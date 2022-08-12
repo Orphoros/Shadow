@@ -28,7 +28,7 @@ export default (client: DiscordClient) => {
 
         event(client);
       } catch (e) {
-        errorLog(`Error registering event file '${eventFile}': %O`, e);
+        errorLog(`Error registering event file '${eventFile}'\n========================\n%O`, e);
       }
     }
   }
