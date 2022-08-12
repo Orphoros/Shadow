@@ -93,7 +93,7 @@ export default {
           sendCrashResponse(interaction, 'Could not set the new bot status with the database!', e);
         });
     } else {
-      sendResponse(interaction, 'You do not have permission to set the status of the bot.', EmbedMessageType.Error, 'Could not send interaction message to user');
+      sendResponse(interaction, 'You are not authorized to set the status of the bot.', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

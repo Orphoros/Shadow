@@ -140,7 +140,7 @@ export default {
           const update = { welcome_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Welcome channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Welcome channel is now configured to <#${channelID}>`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -159,7 +159,7 @@ export default {
           const update = { introduction_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Introduction channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Introduction channel is now configured to <#${channelID}>`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -178,7 +178,7 @@ export default {
           const update = { rules_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Rules channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Rules channel is now configured to <#${channelID}>`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -197,7 +197,7 @@ export default {
           const update = { announcement_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Announcements channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Announcements channel is now configured to <#${channelID}>`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -210,7 +210,7 @@ export default {
           const cnl = interaction.guild?.channels.cache
             .find((c) => c.id === channelID && c.type === 'GUILD_VOICE');
           if (!cnl) {
-            sendResponse(interaction, 'Could not set this channel for the members counter channel! Channel needs to be a voice channel and the bot must be able to join it!', EmbedMessageType.Error, 'Could not send interaction message to user');
+            sendResponse(interaction, 'Could not set this channel for the members counter channel! Channel needs to be a voice channel and the bot must be able see it and edit its name!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
           const update = { members_count_channel_id: channelID };
@@ -219,7 +219,7 @@ export default {
               cnl?.setName(`Member count: ${interaction.guild?.members.cache.filter((m) => !m.user.bot).size}`).catch((e) => {
                 errorLog('Could not set member count\n========================\n%O', e);
               });
-              sendResponse(interaction, `Members counter channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Members counter channel is now configured to <#${channelID}>`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -238,7 +238,7 @@ export default {
           const update = { main_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Main channel is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Main channel is now configured to <#${channelID}>`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -257,7 +257,7 @@ export default {
           const update = { auto_vc_channel_id: channelID };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Voice channel monitoring is now configured to <#${channelID}>`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Voice channel monitoring is now configured to <#${channelID}>`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -283,13 +283,13 @@ export default {
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_users: userID }, { 'admin_users.$': 1 });
           if (array.length > 0) {
-            sendResponse(interaction, `User <@${userID}> is already an admin`, EmbedMessageType.Error, 'Could not send interaction message to user');
+            sendResponse(interaction, `User <@${userID}> has already full access to this bot!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
             break;
           }
           const update = { $push: { admin_users: userID } };
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `User <@${userID}> has now full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `User <@${userID}> has now full access to this bot!`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -304,12 +304,12 @@ export default {
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_roles: roleID }, { 'admin_roles.$': 1 });
           if (array.length > 0) {
-            sendResponse(interaction, `Users under role <@&${roleID}> are already an admin`, EmbedMessageType.Error, 'Could not send interaction message to user');
+            sendResponse(interaction, `Users under role <@&${roleID}> are already an admin`, EmbedMessageType.Warning, 'Could not send interaction message to user');
             break;
           }
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Users under role <@&${roleID}> have now full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Users under role <@&${roleID}> have now full access to this bot!`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -322,13 +322,13 @@ export default {
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_users: userID }, { 'admin_users.$': 1 });
           if (array.length === 0) {
-            sendResponse(interaction, `User <@${userID}> does not exist in the config!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+            sendResponse(interaction, `User <@${userID}> is not yet configured! Cannot remove it!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
             break;
           }
           const update = { $pull: { admin_users: userID } };
           BotGuildConfig.updateOne(query, update, options)
             .then(() => {
-              sendResponse(interaction, `User <@${userID}> has no longer full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `User <@${userID}> has no longer full access to this bot!`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -343,12 +343,12 @@ export default {
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, admin_roles: roleID }, { 'admin_roles.$': 1 });
           if (array.length === 0) {
-            sendResponse(interaction, `Role <@&${roleID}> is not configured! Cannot remove it!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+            sendResponse(interaction, `Role <@&${roleID}> is not yet configured! Cannot remove it!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
             break;
           }
           BotGuildConfig.findOneAndUpdate(query, update, options)
             .then(() => {
-              sendResponse(interaction, `Users under role <@&${roleID}> have no longer full access to this bot!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, `Users under role <@&${roleID}> have no longer full access to this bot!`, EmbedMessageType.Info, 'Could not send interaction message to user');
             })
             .catch((e) => {
               sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
@@ -359,7 +359,7 @@ export default {
         case 'show.config': {
           const config = await BotGuildConfig.findOne(query);
           if (!config) {
-            sendResponse(interaction, 'This bot is not configured for this server!', EmbedMessageType.Error, 'Could not send interaction message to user');
+            sendResponse(interaction, 'This bot is not configured for this server! The bot could not automatically configure itself for this server! Contact the developer or a database admin!', EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
           const embed = new MessageEmbed()

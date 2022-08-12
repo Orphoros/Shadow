@@ -16,9 +16,9 @@ export default {
   async execute(interaction: CommandInteraction<CacheType>, client: DiscordClient): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       client.emit('guildMemberAdd', interaction.member as GuildMember);
-      sendResponse(interaction, 'Simulated a user join with your user!', EmbedMessageType.Success, 'Could not send interaction message to user');
+      sendResponse(interaction, 'Simulated a user join with your user in the configured welcome channel!', EmbedMessageType.Info, 'Could not send interaction message to user');
     } else {
-      sendResponse(interaction, 'You do not have permission to set the status of the bot.', EmbedMessageType.Error, 'Could not send interaction message to user');
+      sendResponse(interaction, 'You are not authorized to execute debugging and testing commands!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

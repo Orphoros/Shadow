@@ -39,7 +39,7 @@ export default {
         }).exec();
 
       if (roleOption !== null) {
-        sendResponse(interaction, `Color role <@&${role?.id}> is already added to the color selection!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+        sendResponse(interaction, `Color role <@&${role?.id}> is already added to the color selection menu! Cannot add it again`, EmbedMessageType.Warning, 'Could not send interaction message to user');
         return;
       }
 
@@ -53,14 +53,14 @@ export default {
           color_description: colorName ?? undefined,
           color_emoji: colorEmoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Color role <@&${role?.id}> is now added as a selectable color to the dropdown menu!\n
-          Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+          sendResponse(interaction, `Color role <@&${role?.id}> is now added as a selectable color menu!\n
+          Make sure to redisplay the color selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save color role <@&${role?.id}> to the remote database!`, e);
         });
       }
     } else {
-      sendResponse(interaction, 'You cannot add color roles to the color selection panel!', EmbedMessageType.Error, 'Could not send interaction message to user');
+      sendResponse(interaction, 'You do not have the permission to add color roles to the color selection menu!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

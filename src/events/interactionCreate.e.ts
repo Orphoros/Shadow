@@ -31,7 +31,7 @@ export default (client: DiscordClient): void => {
               }
             });
             if (interaction.values.length === 0) {
-              sendResponse(interaction, 'Your roles have been cleared!', EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, 'Your selectable roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
               return;
             }
             let errFlag = false;
@@ -43,7 +43,7 @@ export default (client: DiscordClient): void => {
             if (errFlag) {
               sendResponse(interaction, 'Could not update all the roles for you!', EmbedMessageType.Warning, 'Could not send interaction message to user');
             } else {
-              sendResponse(interaction, 'Your role selection have been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
+              sendResponse(interaction, 'Your role selection has been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
             }
             break;
           }
@@ -68,7 +68,7 @@ export default (client: DiscordClient): void => {
                 .then(() => {
                   sendResponse(interaction, `The color <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
                 }).catch(() => {
-                  sendResponse(interaction, `Does not have the permission to assign <@&${role?.id}> to you!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+                  sendResponse(interaction, `Could not assign <@&${role?.id}> to you! Inform the admins and try again later!`, EmbedMessageType.Error, 'Could not send interaction message to user');
                 });
             }
             break;

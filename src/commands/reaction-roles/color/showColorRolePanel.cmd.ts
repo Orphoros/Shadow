@@ -21,9 +21,9 @@ export default {
       }).exec();
 
       if (roleOptions.length === 0) {
-        sendResponse(interaction, `There are no colors added to the color selection! 
-        Cannot display the panel till there are roles added to the color selection list.
-        First add some roles to the panel by slash commands!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+        sendResponse(interaction, `There are no color roles added to the color selection menu! 
+        Cannot display the panel until there are roles added to the color selection list.
+        First add some roles to the panel by slash commands!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       } else {
         const options = roleOptions.map((r) => ({
           label: interaction.guild?.roles.cache.get(r.color_role_id)?.name ?? 'Unknown',
@@ -50,7 +50,7 @@ export default {
             .addOptions(options)
             .setPlaceholder('Select a color')),
         ];
-        sendResponse(interaction, 'Color panel displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
+        sendResponse(interaction, 'Color selector menu is displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({
           embeds: [panelMsg],
           components,
@@ -59,7 +59,7 @@ export default {
         });
       }
     } else {
-      sendResponse(interaction, 'You do not have the permission to display Color Role Panels!', EmbedMessageType.Error, 'Could not send interaction message to user');
+      sendResponse(interaction, 'You do not have the permission to display color selector menus!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

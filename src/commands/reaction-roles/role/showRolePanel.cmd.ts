@@ -21,9 +21,9 @@ export default {
       }).exec();
 
       if (roleOptions.length === 0) {
-        sendResponse(interaction, `There are no roles added to the selection! 
-        Cannot display the panel till there are roles added to the selection.
-        First add some roles to the panel by slash commands!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+        sendResponse(interaction, `There are no roles added to the role selection menu! 
+        Cannot display the menu until there are roles added to the selection.
+        First add some roles to the menu by slash commands!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       } else {
         const options = roleOptions.map((r) => ({
           label: interaction.guild?.roles.cache.get(r.role_id)?.name ?? 'Unknown',
@@ -43,7 +43,7 @@ export default {
             .addOptions(options)
             .setPlaceholder('Select your roles')),
         ];
-        sendResponse(interaction, 'Role panel displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
+        sendResponse(interaction, 'Role menu is displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({
           embeds: [panelMsg],
           components,
@@ -52,7 +52,7 @@ export default {
         });
       }
     } else {
-      sendResponse(interaction, 'You do not have the permission to display Role Panels!', EmbedMessageType.Error, 'Could not send interaction message to user');
+      sendResponse(interaction, 'You do not have the permission to display the role menu!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

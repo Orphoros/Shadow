@@ -32,15 +32,15 @@ export default {
           guild_id: roleOption.guild_id,
         }).then(() => {
           sendResponse(interaction, `Role <@&${role?.id}> is now removed from the selection!\n
-          Remove the old panel and display a new panel to make this change affective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+          Remove the old menu and display a new menu to make this change affective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not delete role <@&${role?.id}> from the remote database!`, e);
         });
       } else {
-        sendResponse(interaction, `Cannot remove role <@&${role?.id}>! This role is not added to the selection!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
+        sendResponse(interaction, `Cannot remove role <@&${role?.id}>! This role is not added to the selection menu!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       }
     } else {
-      sendResponse(interaction, 'You are not authorized to use this command!', EmbedMessageType.Error, 'Could not send interaction message to user');
+      sendResponse(interaction, 'You are not authorized to remove roles from the role selection menu!', EmbedMessageType.Error, 'Could not send interaction message to user');
     }
   },
 };

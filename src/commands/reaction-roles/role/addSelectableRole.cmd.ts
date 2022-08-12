@@ -38,7 +38,7 @@ export default {
       }).exec();
 
       if (roleOption !== null) {
-        sendResponse(interaction, `Role <@&${role?.id}> is already added to the role selection!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+        sendResponse(interaction, `Role <@&${role?.id}> is already added to the role selection menu!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
         return;
       }
 
