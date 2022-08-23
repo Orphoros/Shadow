@@ -71,6 +71,12 @@ export function getAdminRoles(guildId: string): Promise<string[]> {
     .catch(() => []);
 }
 
+export function getBaseRoles(guildId: string): Promise<string[]> {
+  return getBotConfig(guildId)
+    .then((config) => config?.base_roles || [])
+    .catch(() => []);
+}
+
 export function isUserAuthorized(
   interaction: CommandInteraction<CacheType>,
   guild: Guild | null,
