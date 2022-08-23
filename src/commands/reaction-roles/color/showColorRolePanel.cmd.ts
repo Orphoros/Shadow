@@ -13,7 +13,11 @@ export default {
   data: new SlashCommandBuilder()
     .setName('show-color-panel')
     .setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands)
-    .setDescription('Prints the selectable color panel to the current channel'),
+    .setDescription('Prints the selectable color panel to the current channel')
+    .addStringOption((option) => option
+      .setName('embed-json')
+      .setDescription('Embed to display for the color panel message. Must be a valid JSON string.')
+      .setRequired(false)),
   async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const roleOptions: ISelectableColorRoleOption[] = await SelectableColorRoleOption.find({
@@ -39,9 +43,22 @@ export default {
           emoji: '❌',
         });
 
-        const panelMsg = new MessageEmbed()
-          .setColor('#0099ff')
-          .setTitle('Select your color from the list below');
+        const embed = interaction.options.getString('embed-json');
+        let panelMsg;
+
+        if (embed) {
+          try {
+            panelMsg = JSON.parse(embed);
+          } catch (e) {
+            sendResponse(interaction, 'The embed JSON string is not valid!', EmbedMessageType.Error, 'Could not send interaction message to user');
+            return;
+          }
+        } else {
+          panelMsg = new MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle('Select your color from the list below');
+        }
+
         const components = [
           new MessageActionRow().addComponents(new MessageSelectMenu()
             .setCustomId('reaction-colors')
