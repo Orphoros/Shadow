@@ -13,7 +13,11 @@ export default {
   data: new SlashCommandBuilder()
     .setName('show-role-panel')
     .setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands)
-    .setDescription('Prints the role panel to the current channel'),
+    .setDescription('Prints the role panel to the current channel')
+    .addStringOption((option) => option
+      .setName('embed-json')
+      .setDescription('Embed to display for the role panel message. Must be a valid JSON string.')
+      .setRequired(false)),
   async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const roleOptions: ISelectableRoleOption[] = await SelectableRoleOption.find({
@@ -32,9 +36,22 @@ export default {
           emoji: r.role_emoji,
         }));
 
-        const panelMsg = new MessageEmbed()
-          .setColor('#0099ff')
-          .setTitle('Select your roles from the list below! Deselect all roles to clear your roles!');
+        const embed = interaction.options.getString('embed-json');
+        let panelMsg;
+
+        if (embed) {
+          try {
+            panelMsg = JSON.parse(embed);
+          } catch (e) {
+            sendResponse(interaction, 'The embed JSON string is not valid!', EmbedMessageType.Error, 'Could not send interaction message to user');
+            return;
+          }
+        } else {
+          panelMsg = new MessageEmbed()
+            .setColor('#0099ff')
+            .setTitle('Select your roles from the list below! Deselect all roles to clear your roles!');
+        }
+
         const components = [
           new MessageActionRow().addComponents(new MessageSelectMenu()
             .setCustomId('reaction-roles')
