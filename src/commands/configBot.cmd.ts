@@ -84,6 +84,13 @@ export default {
           .setDescription('A Discord user to allow control over the bot')
           .setRequired(true)))
       .addSubcommand((subcommand) => subcommand
+        .setName('base-role')
+        .setDescription('Add a role that the bot can assign to those new members, who read the rules')
+        .addRoleOption((option) => option
+          .setName('role')
+          .setDescription('A role that grants access to the server')
+          .setRequired(true)))
+      .addSubcommand((subcommand) => subcommand
         .setName('admin-role')
         .setDescription('Add a role to the list of roles who can control the bot')
         .addRoleOption((option) => option
@@ -100,6 +107,13 @@ export default {
         .addUserOption((option) => option
           .setName('user')
           .setDescription('An existing Discord user to remove from the bot admin user list')
+          .setRequired(true)))
+      .addSubcommand((subcommand) => subcommand
+        .setName('base-role')
+        .setDescription('Remove a role that the bot could use to assign to those new members, who read the rules')
+        .addRoleOption((option) => option
+          .setName('role')
+          .setDescription('A role that grants access to the server')
           .setRequired(true)))
       .addSubcommand((subcommand) => subcommand
         .setName('admin-role')
@@ -317,6 +331,25 @@ export default {
           break;
         }
 
+        case 'add.base-role': {
+          const roleID = interaction.options.getRole('role')?.id;
+          const update = { $push: { base_roles: roleID } };
+          const array = await BotGuildConfig
+            .find({ guild_id: interaction.guild?.id, base_roles: roleID }, { 'base_roles.$': 1 });
+          if (array.length > 0) {
+            sendResponse(interaction, `Base role <@&${roleID}> is already configured! Cannot add it again!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
+            break;
+          }
+          BotGuildConfig.findOneAndUpdate(query, update, options)
+            .then(() => {
+              sendResponse(interaction, `Base role <@&${roleID}> is now configured!`, EmbedMessageType.Info, 'Could not send interaction message to user');
+            })
+            .catch((e) => {
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
+            });
+          break;
+        }
+
         case 'remove.admin-user': {
           const userID = interaction.options.getUser('user')?.id;
           const array = await BotGuildConfig
@@ -356,6 +389,25 @@ export default {
           break;
         }
 
+        case 'remove.base-role': {
+          const roleID = interaction.options.getRole('role')?.id;
+          const update = { $pull: { base_roles: roleID } };
+          const array = await BotGuildConfig
+            .find({ guild_id: interaction.guild?.id, base_roles: roleID }, { 'base_roles.$': 1 });
+          if (array.length === 0) {
+            sendResponse(interaction, `Role <@&${roleID}> is not yet configured! Cannot remove it!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
+            break;
+          }
+          BotGuildConfig.findOneAndUpdate(query, update, options)
+            .then(() => {
+              sendResponse(interaction, `Base user role <@&${roleID}> is not removed from the bot config!`, EmbedMessageType.Info, 'Could not send interaction message to user');
+            })
+            .catch((e) => {
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
+            });
+          break;
+        }
+
         case 'show.config': {
           const config = await BotGuildConfig.findOne(query);
           if (!config) {
@@ -372,6 +424,9 @@ export default {
 
             __Admin Roles:__
             > ${(!config.admin_roles || config.admin_roles.length === 0) ? '*None*' : config.admin_roles.map((role) => `<@&${role}>`).join(' ')}
+
+            __Base Roles:__
+            > ${(!config.base_roles || config.base_roles.length === 0) ? '*None*' : config.base_roles.map((role) => `<@&${role}>`).join(' ')}
 
             __Welcome channel:__
             > ${(!config.welcome_channel_id) ? '*None*' : `<#${config.welcome_channel_id}>`}
