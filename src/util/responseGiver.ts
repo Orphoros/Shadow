@@ -1,5 +1,5 @@
 import {
-  CacheType, MessageEmbed, CommandInteraction, SelectMenuInteraction,
+  CacheType, MessageEmbed, CommandInteraction, SelectMenuInteraction, ButtonInteraction,
 } from 'discord.js';
 import { errorLog } from '.';
 
@@ -54,7 +54,9 @@ export function returnCrashMsg(
 }
 
 export function sendResponse(
-  intr: CommandInteraction<CacheType> | SelectMenuInteraction<CacheType>,
+  intr: CommandInteraction<CacheType>
+  | SelectMenuInteraction<CacheType>
+  | ButtonInteraction<CacheType>,
   message: string,
   type: EmbedMessageType,
   errLog: string,
@@ -68,7 +70,9 @@ export function sendResponse(
 }
 
 export function sendCrashResponse(
-  intr: CommandInteraction<CacheType> | SelectMenuInteraction<CacheType>,
+  intr: CommandInteraction<CacheType>
+  | SelectMenuInteraction<CacheType>
+  | ButtonInteraction<CacheType>,
   message: string,
   err: any,
 ): void {
