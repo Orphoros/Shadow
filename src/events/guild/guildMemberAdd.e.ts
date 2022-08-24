@@ -20,7 +20,7 @@ export default (client: DiscordClient): void => {
 
       .setColor('#b80000')
       .setTitle('Hello!')
-      .setAuthor({ name: `${member.user.username}`, iconURL: `${member.user.displayAvatarURL()}` })
+      .setAuthor({ name: `${member.user.username}`, iconURL: `${member.user.avatarURL({ dynamic: true })}` })
       .setDescription(
         `${welcomeMessage?.replaceAll('\\n', '\n')}
         
@@ -34,7 +34,7 @@ export default (client: DiscordClient): void => {
       )
       .setImage('attachment://wp_banner.png')
       .setTimestamp()
-      .setFooter({ text: `${member.client.user?.username}`, iconURL: `${member.client.user?.displayAvatarURL()}` });
+      .setFooter({ text: `${member.client.user?.username}`, iconURL: `${member.client.user?.avatarURL({ dynamic: true })}` });
 
     const channel = client.channels.cache
       .get(await getWelcomeChannelId(member.guild.id) ?? '') as TextChannel;
