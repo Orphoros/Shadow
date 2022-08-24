@@ -332,12 +332,18 @@ export default {
         }
 
         case 'add.base-role': {
-          const roleID = interaction.options.getRole('role')?.id;
+          const role = interaction.options.getRole('role');
+          const roleID = role?.id;
           const update = { $push: { base_roles: roleID } };
           const array = await BotGuildConfig
             .find({ guild_id: interaction.guild?.id, base_roles: roleID }, { 'base_roles.$': 1 });
           if (array.length > 0) {
             sendResponse(interaction, `Base role <@&${roleID}> is already configured! Cannot add it again!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
+            break;
+          }
+          if (role!.position >= interaction.guild!.me!.roles.highest.position) {
+            sendResponse(interaction, `Not possible add base role <@&${role?.id}> at the moment!\n
+            The bot can only work with roles that are below its permission level!`, EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
           BotGuildConfig.findOneAndUpdate(query, update, options)
