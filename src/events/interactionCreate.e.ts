@@ -4,7 +4,7 @@ import {
   SelectableColorRoleOption, ISelectableColorRoleOption,
 } from '../schemas';
 import {
-  EmbedMessageType, errorLog, returnCrashMsg, sendResponse,
+  EmbedMessageType, errorLog, getBaseRoles, returnCrashMsg, sendResponse,
 } from '../util';
 import { DiscordClient } from '../typings/client';
 
@@ -16,6 +16,37 @@ export default (client: DiscordClient): void => {
 
         if (!command) return;
         await command.execute(interaction, client);
+      }
+
+      if (interaction.isButton()) {
+        switch (interaction.customId) {
+          case 'btn-accept-rules': {
+            const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
+            const roles = await getBaseRoles(interaction.guildId ?? '');
+
+            if (roles.length === 0) {
+              sendResponse(interaction, 'Thank you for accepting the rules. \n\nPlease note that the bot is not configured to change your permissions. Ask an admin for help!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+              return;
+            }
+
+            let errFlag = false;
+            roles.forEach((role) => {
+              if (!memberRoles.cache.has(role)) {
+                memberRoles.add(role).catch(() => {
+                  errFlag = true;
+                });
+              }
+            });
+            if (errFlag) {
+              sendResponse(interaction, 'Could not assign all required roles for you! Please contact the admins.', EmbedMessageType.Warning, 'Could not send interaction message to user');
+            } else {
+              sendResponse(interaction, 'Thank you for accepting the rules! Welcome!', EmbedMessageType.Success, 'Could not send interaction message to user');
+            }
+            break;
+          }
+
+          default: return;
+        }
       }
 
       if (interaction.isSelectMenu()) {
@@ -60,7 +91,6 @@ export default (client: DiscordClient): void => {
                 memberRoles.remove(r.color_role_id);
               }
             });
-
             if (roleID === '-1') {
               sendResponse(interaction, 'Your selectable color roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
             } else {
