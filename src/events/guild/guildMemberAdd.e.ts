@@ -24,7 +24,7 @@ export default (client: DiscordClient): void => {
       .setDescription(
         `${welcomeMessage?.replaceAll('\\n', '\n')}
         
-        You joined <t:${Math.floor(Date.now() / 1000)}:R>`,
+        <@${member.user.id}> joined <t:${Math.floor(Date.now() / 1000)}:R>`,
       )
       .setThumbnail(`${member.guild.iconURL()}`)
       .addFields(
