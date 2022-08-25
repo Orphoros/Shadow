@@ -36,6 +36,13 @@ export default {
           emoji: r.age_emoji,
         }));
 
+        options.push({
+          label: 'None',
+          value: '-1',
+          description: 'No age to display',
+          emoji: '❌',
+        });
+
         const embed = interaction.options.getString('embed-json');
         let panelMsg;
 
@@ -55,7 +62,6 @@ export default {
         const components = [
           new MessageActionRow().addComponents(new MessageSelectMenu()
             .setCustomId('reaction-age')
-            .setMaxValues(roleOptions.length)
             .addOptions(options)
             .setPlaceholder('Select your age')),
         ];
