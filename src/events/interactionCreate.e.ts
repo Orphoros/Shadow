@@ -1,6 +1,11 @@
 import { GuildMemberRoleManager, Interaction } from 'discord.js';
 import {
-  SelectableColorRoleOption, ISelectableColorRoleOption,
+  ISelectableColorRoleOption, SelectableColorRoleOption,
+  ISelectableAgeRoleOption, SelectableAgeRoleOption,
+  ISelectableRegionRoleOption, SelectableRegionRoleOption,
+  ISelectableDMRoleOption, SelectableDMRoleOption,
+  ISelectablePronounRoleOption, SelectablePronounRoleOption,
+  ISelectablePingRoleOption, SelectablePingRoleOption,
 } from '../schemas';
 import {
   EmbedMessageType, errorLog, getBaseRoles, returnCrashMsg, sendResponse,
@@ -50,6 +55,93 @@ export default (client: DiscordClient): void => {
 
       if (interaction.isSelectMenu()) {
         switch (interaction.customId) {
+          case 'reaction-dm': {
+            const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
+            const roleOptions: ISelectableDMRoleOption[] = await SelectableDMRoleOption
+              .find({
+                guild_id: interaction.guild?.id,
+              }).exec();
+            roleOptions.forEach((r) => {
+              if (memberRoles.cache.has(r.dm_role_id)) {
+                memberRoles.remove(r.dm_role_id);
+              }
+            });
+            if (interaction.values.length === 0) {
+              sendResponse(interaction, 'Your selectable DM roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
+              return;
+            }
+            let errFlag = false;
+            interaction.values.forEach((r) => {
+              memberRoles.add(r).catch(() => {
+                errFlag = true;
+              });
+            });
+            if (errFlag) {
+              sendResponse(interaction, 'Could not update all the DM roles for you!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+            } else {
+              sendResponse(interaction, 'Your DM role selection has been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
+            }
+            break;
+          }
+
+          case 'reaction-pronoun': {
+            const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
+            const roleOptions: ISelectablePronounRoleOption[] = await SelectablePronounRoleOption
+              .find({
+                guild_id: interaction.guild?.id,
+              }).exec();
+            roleOptions.forEach((r) => {
+              if (memberRoles.cache.has(r.pronoun_role_id)) {
+                memberRoles.remove(r.pronoun_role_id);
+              }
+            });
+            if (interaction.values.length === 0) {
+              sendResponse(interaction, 'Your selectable pronoun roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
+              return;
+            }
+            let errFlag = false;
+            interaction.values.forEach((r) => {
+              memberRoles.add(r).catch(() => {
+                errFlag = true;
+              });
+            });
+            if (errFlag) {
+              sendResponse(interaction, 'Could not update all the pronoun roles for you!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+            } else {
+              sendResponse(interaction, 'Your pronoun role selection has been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
+            }
+            break;
+          }
+
+          case 'reaction-ping': {
+            const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
+            const roleOptions: ISelectablePingRoleOption[] = await SelectablePingRoleOption
+              .find({
+                guild_id: interaction.guild?.id,
+              }).exec();
+            roleOptions.forEach((r) => {
+              if (memberRoles.cache.has(r.ping_role_id)) {
+                memberRoles.remove(r.ping_role_id);
+              }
+            });
+            if (interaction.values.length === 0) {
+              sendResponse(interaction, 'Your selectable ping roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
+              return;
+            }
+            let errFlag = false;
+            interaction.values.forEach((r) => {
+              memberRoles.add(r).catch(() => {
+                errFlag = true;
+              });
+            });
+            if (errFlag) {
+              sendResponse(interaction, 'Could not update all the ping roles for you!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+            } else {
+              sendResponse(interaction, 'Your ping role selection has been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
+            }
+            break;
+          }
+
           case 'reaction-colors': {
             const roleID = interaction.values[0];
             const role = interaction.guild?.roles.cache.get(roleID);
@@ -68,6 +160,57 @@ export default (client: DiscordClient): void => {
               memberRoles.add(roleID)
                 .then(() => {
                   sendResponse(interaction, `The color <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+                }).catch(() => {
+                  sendResponse(interaction, `Could not assign <@&${role?.id}> to you! Inform the admins and try again later!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+                });
+            }
+            break;
+          }
+
+          case 'reaction-age': {
+            const roleID = interaction.values[0];
+            const role = interaction.guild?.roles.cache.get(roleID);
+            const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
+            const roleOptions: ISelectableAgeRoleOption[] = await SelectableAgeRoleOption.find({
+              guild_id: interaction.guild?.id,
+            }).exec();
+            roleOptions.forEach((r) => {
+              if (memberRoles.cache.has(r.age_role_id)) {
+                memberRoles.remove(r.age_role_id);
+              }
+            });
+            if (roleID === '-1') {
+              sendResponse(interaction, 'Your selectable age role has been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
+            } else {
+              memberRoles.add(roleID)
+                .then(() => {
+                  sendResponse(interaction, `The age <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+                }).catch(() => {
+                  sendResponse(interaction, `Could not assign <@&${role?.id}> to you! Inform the admins and try again later!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+                });
+            }
+            break;
+          }
+
+          case 'reaction-region': {
+            const roleID = interaction.values[0];
+            const role = interaction.guild?.roles.cache.get(roleID);
+            const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
+            const roleOptions: ISelectableRegionRoleOption[] = await SelectableRegionRoleOption
+              .find({
+                guild_id: interaction.guild?.id,
+              }).exec();
+            roleOptions.forEach((r) => {
+              if (memberRoles.cache.has(r.region_role_id)) {
+                memberRoles.remove(r.region_role_id);
+              }
+            });
+            if (roleID === '-1') {
+              sendResponse(interaction, 'Your selectable region role has been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
+            } else {
+              memberRoles.add(roleID)
+                .then(() => {
+                  sendResponse(interaction, `The region <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
                 }).catch(() => {
                   sendResponse(interaction, `Could not assign <@&${role?.id}> to you! Inform the admins and try again later!`, EmbedMessageType.Error, 'Could not send interaction message to user');
                 });
