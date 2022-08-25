@@ -62,8 +62,6 @@ export default {
         const components = [
           new MessageActionRow().addComponents(new MessageSelectMenu()
             .setCustomId('reaction-colors')
-            .setMaxValues(1)
-            .setMinValues(1)
             .addOptions(options)
             .setPlaceholder('Select a color')),
         ];

@@ -55,6 +55,7 @@ export default {
         const components = [
           new MessageActionRow().addComponents(new MessageSelectMenu()
             .setCustomId('reaction-dm')
+            .setMinValues(0)
             .setMaxValues(roleOptions.length)
             .addOptions(options)
             .setPlaceholder('Select your DM preference')),
