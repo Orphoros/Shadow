@@ -1,6 +1,5 @@
 import { GuildMemberRoleManager, Interaction } from 'discord.js';
 import {
-  ISelectableRoleOption, SelectableRoleOption,
   SelectableColorRoleOption, ISelectableColorRoleOption,
 } from '../schemas';
 import {
@@ -51,34 +50,6 @@ export default (client: DiscordClient): void => {
 
       if (interaction.isSelectMenu()) {
         switch (interaction.customId) {
-          case 'reaction-roles': {
-            const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
-            const roleOptions: ISelectableRoleOption[] = await SelectableRoleOption.find({
-              guild_id: interaction.guild?.id,
-            }).exec();
-            roleOptions.forEach((r) => {
-              if (memberRoles.cache.has(r.role_id)) {
-                memberRoles.remove(r.role_id);
-              }
-            });
-            if (interaction.values.length === 0) {
-              sendResponse(interaction, 'Your selectable roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
-              return;
-            }
-            let errFlag = false;
-            interaction.values.forEach((r) => {
-              memberRoles.add(r).catch(() => {
-                errFlag = true;
-              });
-            });
-            if (errFlag) {
-              sendResponse(interaction, 'Could not update all the roles for you!', EmbedMessageType.Warning, 'Could not send interaction message to user');
-            } else {
-              sendResponse(interaction, 'Your role selection has been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
-            }
-            break;
-          }
-
           case 'reaction-colors': {
             const roleID = interaction.values[0];
             const role = interaction.guild?.roles.cache.get(roleID);
