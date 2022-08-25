@@ -11,7 +11,7 @@ import {
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('show-age-panel')
+    .setName('show-dm-panel')
     .setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands)
     .setDescription('Prints the DM role panel to the current channel')
     .addStringOption((option) => option

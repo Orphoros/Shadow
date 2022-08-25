@@ -10,7 +10,7 @@ import {
 
 export default {
   data: new SlashCommandBuilder()
-    .setName('remove-selectable-age')
+    .setName('remove-selectable-dm')
     .setDescription('Remove an dm role from the selectable dm list')
     .setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands)
     .addRoleOption((option) => option
