@@ -56,30 +56,26 @@ export default (client: DiscordClient): void => {
       if (interaction.isSelectMenu()) {
         switch (interaction.customId) {
           case 'reaction-dm': {
+            const roleID = interaction.values[0];
+            const role = interaction.guild?.roles.cache.get(roleID);
             const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
-            const roleOptions: ISelectableDMRoleOption[] = await SelectableDMRoleOption
-              .find({
-                guild_id: interaction.guild?.id,
-              }).exec();
+            const roleOptions: ISelectableDMRoleOption[] = await SelectableDMRoleOption.find({
+              guild_id: interaction.guild?.id,
+            }).exec();
             roleOptions.forEach((r) => {
               if (memberRoles.cache.has(r.dm_role_id)) {
                 memberRoles.remove(r.dm_role_id);
               }
             });
-            if (interaction.values.length === 0) {
-              sendResponse(interaction, 'Your selectable DM roles have been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
-              return;
-            }
-            let errFlag = false;
-            interaction.values.forEach((r) => {
-              memberRoles.add(r).catch(() => {
-                errFlag = true;
-              });
-            });
-            if (errFlag) {
-              sendResponse(interaction, 'Could not update all the DM roles for you!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+            if (roleID === '-1') {
+              sendResponse(interaction, 'Your selectable DM role has been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
             } else {
-              sendResponse(interaction, 'Your DM role selection has been updated!', EmbedMessageType.Success, 'Could not send interaction message to user');
+              memberRoles.add(roleID)
+                .then(() => {
+                  sendResponse(interaction, `The DM role <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+                }).catch(() => {
+                  sendResponse(interaction, `Could not assign <@&${role?.id}> to you! Inform the admins and try again later!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+                });
             }
             break;
           }

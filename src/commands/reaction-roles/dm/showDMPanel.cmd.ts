@@ -36,6 +36,13 @@ export default {
           emoji: r.dm_emoji,
         }));
 
+        options.push({
+          label: 'None',
+          value: '-1',
+          description: 'No region to display',
+          emoji: '❌',
+        });
+
         const embed = interaction.options.getString('embed-json');
         let panelMsg;
 
@@ -55,8 +62,6 @@ export default {
         const components = [
           new MessageActionRow().addComponents(new MessageSelectMenu()
             .setCustomId('reaction-dm')
-            .setMinValues(0)
-            .setMaxValues(roleOptions.length)
             .addOptions(options)
             .setPlaceholder('Select your DM preference')),
         ];
