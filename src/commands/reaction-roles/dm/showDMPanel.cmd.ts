@@ -39,7 +39,7 @@ export default {
         options.push({
           label: 'None',
           value: '-1',
-          description: 'No region to display',
+          description: 'No DM preference to display',
           emoji: '❌',
         });
 
