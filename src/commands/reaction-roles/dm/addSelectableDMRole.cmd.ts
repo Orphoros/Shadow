@@ -52,7 +52,7 @@ export default {
           dm_description: description ?? undefined,
           dm_emoji: emoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `DM role <@&${role?.id}> is now added as a selectable role to the dropdown menu!\n
+          sendResponse(interaction, `DM role <@&${role?.id}> is now added as a selectable DM option!\n
           Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save dm role <@&${role?.id}> to the remote database!`, e);

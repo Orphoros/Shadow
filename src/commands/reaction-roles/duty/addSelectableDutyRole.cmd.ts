@@ -53,7 +53,7 @@ export default {
           duty_emoji: roleEmoji ?? undefined,
         }).save().then(() => {
           sendResponse(interaction, `Duty role <@&${role?.id}> is now added as a selectable duty option!\n
-            Make sure to redisplay the duty selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+          Make sure to redisplay the duty selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save duty role <@&${role?.id}> to the remote database!`, e);
         });

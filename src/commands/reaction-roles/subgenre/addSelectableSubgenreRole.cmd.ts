@@ -53,7 +53,7 @@ export default {
           subgenre_description: roleDescription ?? undefined,
           subgenre_emoji: roleEmoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Subgenre role <@&${role?.id}> is now added as a selectable subgenre menu!\n
+          sendResponse(interaction, `Subgenre role <@&${role?.id}> is now added as a selectable subgenre option!\n
           Make sure to redisplay the subgenre selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save subgenre role <@&${role?.id}> to the remote database!`, e);

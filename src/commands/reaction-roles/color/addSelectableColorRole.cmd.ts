@@ -53,7 +53,7 @@ export default {
           color_description: colorName ?? undefined,
           color_emoji: colorEmoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Color role <@&${role?.id}> is now added as a selectable color menu!\n
+          sendResponse(interaction, `Color role <@&${role?.id}> is now added as a selectable color option!\n
           Make sure to redisplay the color selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save color role <@&${role?.id}> to the remote database!`, e);

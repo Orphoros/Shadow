@@ -53,7 +53,7 @@ export default {
           pronoun_description: roleDescription ?? undefined,
           pronoun_emoji: roleEmoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Pronoun role <@&${role?.id}> is now added as a selectable pronoun menu!\n
+          sendResponse(interaction, `Pronoun role <@&${role?.id}>  is now added as a selectable pronoun option!\n
           Make sure to redisplay the pronoun selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save pronoun role <@&${role?.id}> to the remote database!`, e);

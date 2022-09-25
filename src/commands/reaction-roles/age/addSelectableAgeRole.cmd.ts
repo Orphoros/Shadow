@@ -52,7 +52,7 @@ export default {
           age_description: description ?? undefined,
           age_emoji: emoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Age role <@&${role?.id}> is now added as a selectable role to the dropdown menu!\n
+          sendResponse(interaction, `Age role <@&${role?.id}> is now added as a selectable age option!\n
           Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save age role <@&${role?.id}> to the remote database!`, e);

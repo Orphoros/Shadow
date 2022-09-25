@@ -53,7 +53,7 @@ export default {
           ping_description: roleDescription ?? undefined,
           ping_emoji: roleEmoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Ping role <@&${role?.id}> is now added as a selectable ping menu!\n
+          sendResponse(interaction, `Ping role <@&${role?.id}> is now added as a selectable ping option!\n
           Make sure to redisplay the ping selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save ping role <@&${role?.id}> to the remote database!`, e);

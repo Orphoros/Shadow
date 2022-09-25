@@ -53,7 +53,7 @@ export default {
           region_description: description ?? undefined,
           region_emoji: emoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Region role <@&${role?.id}> is now added as a selectable role to the dropdown menu!\n
+          sendResponse(interaction, `Region role <@&${role?.id}> is now added to the dropdown menu as a selectable role!\n
           Make sure to redisplay the panel to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save region role <@&${role?.id}> to the remote database!`, e);
