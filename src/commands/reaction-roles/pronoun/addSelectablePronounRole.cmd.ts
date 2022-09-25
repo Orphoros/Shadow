@@ -32,6 +32,15 @@ export default {
       const roleEmoji = interaction.options.getString('emoji');
       const guildID = interaction.guild?.id;
 
+      const numOfRoles = await SelectablePronounRoleOption.countDocuments({
+        guild_id: guildID,
+      }).exec();
+
+      if (numOfRoles >= 25) {
+        sendResponse(interaction, 'You can only add 25 options to one selection menu! The maximum amount of options has been already reached!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+        return;
+      }
+
       const roleOption: ISelectablePronounRoleOption | null = await SelectablePronounRoleOption
         .findOne({
           pronoun_role_id: role?.id,

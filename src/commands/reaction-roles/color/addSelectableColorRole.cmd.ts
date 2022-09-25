@@ -32,6 +32,15 @@ export default {
       const colorEmoji = interaction.options.getString('color-emoji');
       const guildID = interaction.guild?.id;
 
+      const numOfRoles = await SelectableColorRoleOption.countDocuments({
+        guild_id: guildID,
+      }).exec();
+
+      if (numOfRoles >= 25) {
+        sendResponse(interaction, 'You can only add 25 options to one selection menu! The maximum amount of options has been already reached!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+        return;
+      }
+
       const roleOption: ISelectableColorRoleOption | null = await SelectableColorRoleOption
         .findOne({
           color_role_id: role?.id,
