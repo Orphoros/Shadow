@@ -1,6 +1,6 @@
 import { ObjectId, Query } from 'mongoose';
 import {
-  CacheType, CommandInteraction, Guild, GuildMemberRoleManager,
+  CacheType, CommandInteraction, Guild, GuildMemberRoleManager, SelectMenuInteraction,
 } from 'discord.js';
 import { BotGuildConfig, IBotGuildConfig } from '../schemas';
 
@@ -77,6 +77,12 @@ export function getBaseRoles(guildId: string): Promise<string[]> {
     .catch(() => []);
 }
 
+export function getModRoles(guildId: string): Promise<string[]> {
+  return getBotConfig(guildId)
+    .then((config) => config?.mod_roles || [])
+    .catch(() => []);
+}
+
 export function isUserAuthorized(
   interaction: CommandInteraction<CacheType>,
   guild: Guild | null,
@@ -94,4 +100,30 @@ export function isUserAuthorized(
 
   return Promise.all([isInUserList, isInAdminRolesList])
     .then(([users, roles]) => users || roles || (userID === guildOwnerID)).catch(() => false);
+}
+
+export function isInteractionUserMod(
+  interaction: SelectMenuInteraction<CacheType>,
+)
+: Promise<boolean> {
+  if (interaction.guild === null || !interaction.guild.id || !interaction.member) {
+    return Promise.resolve(false);
+  }
+  const userID = interaction.member.user?.id ?? '';
+  const userRoles = interaction.member.roles as GuildMemberRoleManager;
+
+  const guildOwnerID = interaction.guild?.ownerId ?? '';
+
+  const isInUserList = getAdminUsers(interaction.guild.id).then((users) => users.includes(userID));
+  const isInAdminRolesList = getAdminRoles(interaction.guild.id)
+    .then((roles) => userRoles.cache.some((role) => roles.includes(role.id)));
+  const isInModRolesList = getModRoles(interaction.guild.id)
+    .then((roles) => userRoles.cache.some((role) => roles.includes(role.id)));
+
+  return Promise.all([isInUserList, isInAdminRolesList, isInModRolesList])
+    .then(([users, adminRoles, modRoles]) => users
+    || adminRoles
+    || modRoles
+    || (userID === guildOwnerID))
+    .catch(() => false);
 }

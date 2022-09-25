@@ -91,6 +91,13 @@ export default {
           .setDescription('A role that grants access to the server')
           .setRequired(true)))
       .addSubcommand((subcommand) => subcommand
+        .setName('moderator-role')
+        .setDescription('Add a role that the bot can assign to those who moderate the server')
+        .addRoleOption((option) => option
+          .setName('role')
+          .setDescription('A role that the moderators or stuff have')
+          .setRequired(true)))
+      .addSubcommand((subcommand) => subcommand
         .setName('admin-role')
         .setDescription('Add a role to the list of roles who can control the bot')
         .addRoleOption((option) => option
@@ -331,6 +338,31 @@ export default {
           break;
         }
 
+        case 'add.moderator-role': {
+          const role = interaction.options.getRole('role');
+          const roleID = role?.id;
+          const update = { $push: { mod_roles: roleID } };
+          const array = await BotGuildConfig
+            .find({ guild_id: interaction.guild?.id, mod_roles: roleID }, { 'mod_roles.$': 1 });
+          if (array.length > 0) {
+            sendResponse(interaction, `Moderator role <@&${roleID}> is already configured! Cannot add it again!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
+            break;
+          }
+          if (role!.position >= interaction.guild!.me!.roles.highest.position) {
+            sendResponse(interaction, `Not possible add moderator role <@&${role?.id}> at the moment!\n
+            The bot can only work with roles that are below its permission level!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+            break;
+          }
+          BotGuildConfig.findOneAndUpdate(query, update, options)
+            .then(() => {
+              sendResponse(interaction, `Moderator role <@&${roleID}> is now configured!`, EmbedMessageType.Info, 'Could not send interaction message to user');
+            })
+            .catch((e) => {
+              sendCrashResponse(interaction, 'Could not set the new bot config with the database!', e);
+            });
+          break;
+        }
+
         case 'add.base-role': {
           const role = interaction.options.getRole('role');
           const roleID = role?.id;
@@ -430,6 +462,9 @@ export default {
 
             __Admin Roles:__
             > ${(!config.admin_roles || config.admin_roles.length === 0) ? '*None*' : config.admin_roles.map((role) => `<@&${role}>`).join(' ')}
+
+            __Mod Roles:__
+            > ${(!config.mod_roles || config.mod_roles.length === 0) ? '*None*' : config.mod_roles.map((role) => `<@&${role}>`).join(' ')}
 
             __Base Roles:__
             > ${(!config.base_roles || config.base_roles.length === 0) ? '*None*' : config.base_roles.map((role) => `<@&${role}>`).join(' ')}

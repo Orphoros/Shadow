@@ -11,6 +11,7 @@ export interface IBotGuildConfig extends Document {
     introduction_channel_id?: string;
     admin_users?: string[];
     admin_roles?: string[];
+    mod_roles?: string[];
     auto_vc_channel_id?: string;
     welcome_message?: string;
     members_count_channel_id?: string;
@@ -75,6 +76,11 @@ const schema: Schema = new Schema({
     nullable: true,
   },
   base_roles: {
+    type: [String],
+    required: false,
+    nullable: true,
+  },
+  mod_roles: {
     type: [String],
     required: false,
     nullable: true,

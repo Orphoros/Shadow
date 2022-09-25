@@ -10,7 +10,7 @@ import {
   ISelectableDutyRoleOption, SelectableDutyRoleOption,
 } from '../schemas';
 import {
-  EmbedMessageType, errorLog, getBaseRoles, returnCrashMsg, sendResponse,
+  EmbedMessageType, errorLog, getBaseRoles, isInteractionUserMod, returnCrashMsg, sendResponse,
 } from '../util';
 import { DiscordClient } from '../typings/client';
 
@@ -198,23 +198,27 @@ export default (client: DiscordClient): void => {
             const roleID = interaction.values[0];
             const role = interaction.guild?.roles.cache.get(roleID);
             const memberRoles = interaction.member?.roles as GuildMemberRoleManager;
-            const roleOptions: ISelectableDutyRoleOption[] = await SelectableDutyRoleOption.find({
-              guild_id: interaction.guild?.id,
-            }).exec();
-            roleOptions.forEach((r) => {
-              if (memberRoles.cache.has(r.duty_role_id)) {
-                memberRoles.remove(r.duty_role_id);
+            if (await isInteractionUserMod(interaction)) {
+              const roleOptions: ISelectableDutyRoleOption[] = await SelectableDutyRoleOption.find({
+                guild_id: interaction.guild?.id,
+              }).exec();
+              roleOptions.forEach((r) => {
+                if (memberRoles.cache.has(r.duty_role_id)) {
+                  memberRoles.remove(r.duty_role_id);
+                }
+              });
+              if (roleID === '-1') {
+                sendResponse(interaction, 'Your selectable duty role has been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
+              } else {
+                memberRoles.add(roleID)
+                  .then(() => {
+                    sendResponse(interaction, `The duty role <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+                  }).catch(() => {
+                    sendResponse(interaction, `Could not assign <@&${role?.id}> to you! Inform the admins and try again later!`, EmbedMessageType.Error, 'Could not send interaction message to user');
+                  });
               }
-            });
-            if (roleID === '-1') {
-              sendResponse(interaction, 'Your selectable duty role has been cleared!', EmbedMessageType.Info, 'Could not send interaction message to user');
             } else {
-              memberRoles.add(roleID)
-                .then(() => {
-                  sendResponse(interaction, `The duty role <@&${role?.id}> is now assigned to you!`, EmbedMessageType.Success, 'Could not send interaction message to user');
-                }).catch(() => {
-                  sendResponse(interaction, `Could not assign <@&${role?.id}> to you! Inform the admins and try again later!`, EmbedMessageType.Error, 'Could not send interaction message to user');
-                });
+              sendResponse(interaction, 'Only moderators can interact with this menu!', EmbedMessageType.Error, 'Could not send interaction message to user');
             }
             break;
           }
