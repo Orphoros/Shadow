@@ -2,7 +2,9 @@ import mongoose from 'mongoose';
 import { PresenceStatusData } from 'discord.js';
 import { initAutoVCHandler } from '../handlers/autoVCHandler';
 import { DiscordClient } from '../typings/client';
-import { shutdown, bootLog, errorLog } from '../util';
+import {
+  shutdown, bootLog, errorLog,
+} from '../util';
 import { IBotStatusConfig, BotStatusConfig } from '../schemas';
 
 export default (client: DiscordClient): void => {
@@ -47,6 +49,7 @@ export default (client: DiscordClient): void => {
     }).exec();
 
     if (status) {
+      bootLog('Bot status loaded');
       let statusType: PresenceStatusData;
       switch (status.status_type) {
         case 1:
@@ -62,11 +65,12 @@ export default (client: DiscordClient): void => {
           statusType = 'invisible';
           break;
         default:
+          errorLog('Received invalid status type from the database: %o', status.status_type);
           statusType = 'online';
       }
+      bootLog('Setting bot status to: %o - %o - %o', statusType, status.status_activity, status.status_msg);
       client.user?.setStatus(statusType);
       client.user?.setActivity(status.status_msg!, { type: status.status_activity! });
-      bootLog('Bot status loaded');
     } else {
       await new BotStatusConfig({
         _id: 1,
