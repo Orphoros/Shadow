@@ -2,11 +2,6 @@ version: "1.0.0"
 
 services:
   app:
-    entrypoint:
-      BOT_TOKEN: ${BOT_TOKEN}
-      ENV: ${ENV}
-      MONGO_URI: ${MONGO_URI}
-      RESET_COMMANDS: ${RESET_COMMANDS}
     container_name: shadow
     image: shadow
     restart: always
