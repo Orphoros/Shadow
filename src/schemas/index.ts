@@ -7,3 +7,4 @@ export * from './selectableRegionRoleOption';
 export * from './selectablePronounRoleOption';
 export * from './selectableDMRoleOption';
 export * from './selectableSubgenreRoleOption';
+export * from './selectableDutyRoleOption';
