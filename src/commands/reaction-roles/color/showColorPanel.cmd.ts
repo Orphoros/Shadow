@@ -13,19 +13,36 @@ export default {
   data: new SlashCommandBuilder()
     .setName('show-color-panel')
     .setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands)
-    .setDescription('Prints the selectable color panel to the current channel')
+    .setDescription('Prints a selectable color panel to the current channel')
+    .addStringOption((option) => option
+      .setName('color-menu')
+      .setRequired(true)
+      .addChoices(
+        { name: 'red', value: 'red' },
+        { name: 'orange', value: 'orange' },
+        { name: 'yellow', value: 'yellow' },
+        { name: 'green', value: 'green' },
+        { name: 'blue', value: 'blue' },
+        { name: 'pink', value: 'pink' },
+        { name: 'grey', value: 'grey' },
+        { name: 'white', value: 'white' },
+        { name: 'black', value: 'black' },
+      )
+      .setDescription('Select which color menu to display'))
     .addStringOption((option) => option
       .setName('embed-json')
       .setDescription('Embed to display for the color panel message. Must be a valid JSON string.')
       .setRequired(false)),
   async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
+      const colorMenu = interaction.options.getString('color-menu');
       const roleOptions: ISelectableColorRoleOption[] = await SelectableColorRoleOption.find({
         guild_id: interaction.guild?.id,
+        menu_id: colorMenu,
       }).exec();
 
       if (roleOptions.length === 0) {
-        sendResponse(interaction, `There are no color roles added to the color selection menu! 
+        sendResponse(interaction, `There are no color roles added to the ${colorMenu} color selection menu! 
         Cannot display the panel until there are roles added to the color selection list.
         First add some roles to the panel by slash commands!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       } else {
@@ -65,7 +82,7 @@ export default {
             .addOptions(options)
             .setPlaceholder('Select a color')),
         ];
-        sendResponse(interaction, 'Color selector menu is displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
+        sendResponse(interaction, `The ${colorMenu} color selector menu is displayed successfully!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({
           embeds: [panelMsg],
           components,
