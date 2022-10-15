@@ -5,6 +5,7 @@ import {
 export interface ISelectableColorRoleOption extends Document {
   guild_id: string;
   color_role_id: string;
+  menu_id: string;
   color_description?: string;
   color_emoji?: string;
 }
@@ -25,6 +26,10 @@ const schema: Schema = new Schema({
   color_emoji: {
     type: String,
     required: false,
+  },
+  menu_id: {
+    type: String,
+    required: true,
   },
 });
 

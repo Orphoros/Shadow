@@ -18,6 +18,21 @@ export default {
       .setDescription('Role with a color to add to the selectable colors list')
       .setRequired(true))
     .addStringOption((option) => option
+      .setName('color-menu')
+      .setRequired(true)
+      .addChoices(
+        { name: 'red', value: 'red' },
+        { name: 'orange', value: 'orange' },
+        { name: 'yellow', value: 'yellow' },
+        { name: 'green', value: 'green' },
+        { name: 'blue', value: 'blue' },
+        { name: 'pink', value: 'pink' },
+        { name: 'grey', value: 'grey' },
+        { name: 'white', value: 'white' },
+        { name: 'black', value: 'black' },
+      )
+      .setDescription('Select which color menu should have the color role'))
+    .addStringOption((option) => option
       .setName('color-name')
       .setDescription('Name of the color')
       .setRequired(false))
@@ -30,14 +45,16 @@ export default {
       const role = interaction.options.getRole('role');
       const colorName = interaction.options.getString('color-name');
       const colorEmoji = interaction.options.getString('color-emoji');
+      const colorMenu = interaction.options.getString('color-menu');
       const guildID = interaction.guild?.id;
 
       const numOfRoles = await SelectableColorRoleOption.countDocuments({
         guild_id: guildID,
+        menu_id: colorMenu,
       }).exec();
 
       if (numOfRoles >= 25) {
-        sendResponse(interaction, 'You can only add 25 options to one selection menu! The maximum amount of options has been already reached!', EmbedMessageType.Warning, 'Could not send interaction message to user');
+        sendResponse(interaction, `You can only add 25 options to the ${colorMenu} color selection menu! The maximum amount of options has been already reached! Try adding the color role to an other color menu!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
         return;
       }
 
@@ -48,22 +65,23 @@ export default {
         }).exec();
 
       if (roleOption !== null) {
-        sendResponse(interaction, `Color role <@&${role?.id}> is already added to the color selection menu! Cannot add it again`, EmbedMessageType.Warning, 'Could not send interaction message to user');
+        sendResponse(interaction, `Color role <@&${role?.id}> is already added to a color selection menu! Cannot add it more than once.`, EmbedMessageType.Warning, 'Could not send interaction message to user');
         return;
       }
 
       if (role!.position >= interaction.guild!.me!.roles.highest.position) {
-        sendResponse(interaction, `Not possible to add color role <@&${role?.id}> to the color selection at the moment!\n
+        sendResponse(interaction, `Not possible to add color role <@&${role?.id}> to the ${colorMenu} color selection at the moment!\n
         The bot can only work with roles that are below its permission level!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       } else {
         await new SelectableColorRoleOption({
           color_role_id: role?.id,
           guild_id: guildID,
+          menu_id: colorMenu,
           color_description: colorName ?? undefined,
           color_emoji: colorEmoji ?? undefined,
         }).save().then(() => {
-          sendResponse(interaction, `Color role <@&${role?.id}> is now added as a selectable color option!\n
-          Make sure to redisplay the color selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
+          sendResponse(interaction, `Color role <@&${role?.id}> is now added as the ${colorMenu} selectable color menu!\n
+          Make sure to redisplay the ${colorMenu} color selector menu to make this change effective!`, EmbedMessageType.Success, 'Could not send interaction message to user');
         }).catch((e) => {
           sendCrashResponse(interaction, `Could not save color role <@&${role?.id}> to the remote database!`, e);
         });
