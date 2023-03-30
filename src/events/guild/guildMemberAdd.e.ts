@@ -1,4 +1,4 @@
-import { MessageEmbed, TextChannel } from 'discord.js';
+import { EmbedBuilder, TextChannel } from 'discord.js';
 import path from 'path';
 import {
   getIntroductionChannelId, getMainChannelId,
@@ -16,11 +16,11 @@ export default (client: DiscordClient): void => {
     const mainChannelId = await getMainChannelId(member.guild.id);
     const memberCountChannelId = await getMembersCountChannelID(member.guild.id);
 
-    const welcomeEmbed = new MessageEmbed()
+    const welcomeEmbed = new EmbedBuilder()
 
       .setColor('#b80000')
       .setTitle('Hello!')
-      .setAuthor({ name: `${member.user.username}`, iconURL: `${member.user.displayAvatarURL({ dynamic: true })}` })
+      .setAuthor({ name: `${member.user.username}`, iconURL: `${member.user.displayAvatarURL()}` })
       .setDescription(
         `${welcomeMessage?.replaceAll('\\n', '\n')}
         
@@ -34,7 +34,7 @@ export default (client: DiscordClient): void => {
       )
       .setImage('attachment://wp_banner.png')
       .setTimestamp()
-      .setFooter({ text: `${member.client.user?.username}`, iconURL: `${member.client.user?.displayAvatarURL({ dynamic: true })}` });
+      .setFooter({ text: `${member.client.user?.username}`, iconURL: `${member.client.user?.displayAvatarURL()}` });
 
     const channel = client.channels.cache
       .get(await getWelcomeChannelId(member.guild.id) ?? '') as TextChannel;

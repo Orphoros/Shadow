@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction, GuildMember,
+  CacheType, ChatInputCommandInteraction, GuildMember,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { DiscordClient } from '../typings/client';
@@ -13,7 +13,10 @@ export default {
     .setName('simulate-join')
     .setDescription('Simulate a user joining the server')
     .setDefaultMemberPermissions(PermissionFlagsBits.UseApplicationCommands),
-  async execute(interaction: CommandInteraction<CacheType>, client: DiscordClient): Promise<void> {
+  async execute(
+    interaction: ChatInputCommandInteraction<CacheType>,
+    client: DiscordClient,
+  ): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       client.emit('guildMemberAdd', interaction.member as GuildMember);
       sendResponse(interaction, 'Simulated a user join with your user in the configured welcome channel!', EmbedMessageType.Info, 'Could not send interaction message to user');

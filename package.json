@@ -13,7 +13,8 @@
     "build": "npx tsc",
     "watch:dev": "nodemon",
     "docker:build": "docker build -t orphoros/shadow .",
-    "docker:push": "docker push orphoros/shadow"
+    "docker:push": "docker push orphoros/shadow",
+    "node:upgrade": "npx npm-check-updates"
   },
   "repository": {
     "type": "git",
@@ -26,25 +27,25 @@
   },
   "homepage": "https://github.com/Orphoros/Shadow#readme",
   "dependencies": {
-    "@discordjs/builders": "^0.15.0",
-    "@types/mongoose": "^5.11.97",
+    "@discordjs/builders": "^1.5.0",
     "@types/debug": "^4.1.7",
+    "@types/mongoose": "^5.11.97",
     "cross-env": "^7.0.3",
     "debug": "^4.3.4",
-    "discord-api-types": "^0.36.3",
-    "discord.js": "^13.8.1",
-    "dotenv": "^16.0.1",
-    "mongoose": "^6.4.7",
+    "discord-api-types": "^0.37.37",
+    "discord.js": "^14.8.0",
+    "dotenv": "^16.0.3",
+    "mongoose": "^7.0.3",
     "ts-node": "^10.9.1"
   },
   "devDependencies": {
-    "@types/node": "^18.0.4",
-    "@typescript-eslint/eslint-plugin": "^5.30.6",
-    "@typescript-eslint/parser": "^5.30.6",
-    "eslint": "^8.19.0",
+    "@types/node": "^18.15.11",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
+    "eslint": "^8.37.0",
     "eslint-config-airbnb-base": "^15.0.0",
-    "nodemon": "^2.0.19",
-    "typescript": "^4.7.4"
+    "nodemon": "^2.0.22",
+    "typescript": "^5.0.2"
   },
   "nodemonConfig": {
     "exec": "npm run start",

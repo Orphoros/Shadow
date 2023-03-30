@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction, MessageActionRow,
-  MessageEmbed, MessageSelectMenu,
+  ActionRowBuilder,
+  CacheType, ChatInputCommandInteraction, EmbedBuilder, StringSelectMenuBuilder,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableDMRoleOption, SelectableDMRoleOption } from '../../../schemas';
@@ -18,7 +18,7 @@ export default {
       .setName('embed-json')
       .setDescription('Embed to display for the DM role panel message. Must be a valid JSON string.')
       .setRequired(false)),
-  async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const roleOptions: ISelectableDMRoleOption[] = await SelectableDMRoleOption.find({
         guild_id: interaction.guild?.id,
@@ -54,16 +54,17 @@ export default {
             return;
           }
         } else {
-          panelMsg = new MessageEmbed()
+          panelMsg = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle('Select your DM preference from the list below!');
         }
 
         const components = [
-          new MessageActionRow().addComponents(new MessageSelectMenu()
-            .setCustomId('reaction-dm')
-            .addOptions(options)
-            .setPlaceholder('Select your DM preference')),
+          new ActionRowBuilder<StringSelectMenuBuilder>()
+            .addComponents(new StringSelectMenuBuilder()
+              .setCustomId('reaction-dm')
+              .addOptions(options)
+              .setPlaceholder('Select your DM preference')),
         ];
         sendResponse(interaction, 'DM selector menu is displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({

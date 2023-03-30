@@ -1,10 +1,11 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction, MessageActionRow,
-  MessageButton,
-  MessageEmbed,
+  ActionRowBuilder,
+  ButtonBuilder,
+  CacheType, ChatInputCommandInteraction,
+  EmbedBuilder,
 } from 'discord.js';
-import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { ButtonStyle, PermissionFlagsBits } from 'discord-api-types/v10';
 import {
   isUserAuthorized, errorLog, EmbedMessageType, sendResponse, getBaseRoles,
 } from '../util';
@@ -18,7 +19,7 @@ export default {
       .setName('embed-json')
       .setDescription('Embed to display for the rules panel message. Must be a valid JSON string.')
       .setRequired(false)),
-  async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const baseRoles = await getBaseRoles(interaction.guildId ?? '');
 
@@ -38,16 +39,16 @@ export default {
             return;
           }
         } else {
-          panelMsg = new MessageEmbed()
+          panelMsg = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle('Confirm that you have read the rules by clicking the button below!');
         }
 
         const components = [
-          new MessageActionRow().addComponents(new MessageButton()
+          new ActionRowBuilder<ButtonBuilder>().addComponents(new ButtonBuilder()
             .setCustomId('btn-accept-rules')
             .setLabel('I accept the rules')
-            .setStyle('SUCCESS')),
+            .setStyle(ButtonStyle.Success)),
         ];
         sendResponse(interaction, 'Rules panel is displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({

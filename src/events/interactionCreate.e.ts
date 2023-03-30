@@ -21,7 +21,10 @@ export default (client: DiscordClient): void => {
         const command = client.commands.get(interaction.commandName);
 
         if (!command) return;
-        await command.execute(interaction, client);
+        // TODO: Add support for other types of interaction types (e.g. context menu)
+        if (interaction.isChatInputCommand()) {
+          await command.execute(interaction, client);
+        }
       }
 
       if (interaction.isButton()) {
@@ -55,7 +58,7 @@ export default (client: DiscordClient): void => {
         }
       }
 
-      if (interaction.isSelectMenu()) {
+      if (interaction.isStringSelectMenu()) {
         switch (interaction.customId) {
           case 'reaction-dm': {
             const roleID = interaction.values[0];

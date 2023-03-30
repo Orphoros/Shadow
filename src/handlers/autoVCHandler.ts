@@ -1,4 +1,5 @@
 import {
+  ChannelType,
   Guild, GuildMember, VoiceBasedChannel,
 } from 'discord.js';
 import { dbgLog } from '../util';
@@ -49,8 +50,9 @@ export class AutoVCManager {
 
   public async createVC(guild: Guild, vc: VoiceBasedChannel, member: GuildMember) {
     return guild.channels
-      .create(`🗣️ ${member.user.username}`, {
-        type: 'GUILD_VOICE',
+      .create({
+        name: `🗣️ ${member.user.username}`,
+        type: ChannelType.GuildVoice,
         parent: vc.parent?.id,
       })
       .then(async (c) => {

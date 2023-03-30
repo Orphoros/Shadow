@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction,
+  CacheType, ChatInputCommandInteraction,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableAgeRoleOption, SelectableAgeRoleOption } from '../../../schemas';
@@ -17,7 +17,7 @@ export default {
       .setName('role')
       .setDescription('Age role to remove from the selectable age list')
       .setRequired(true)),
-  async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const role = interaction.options.getRole('role');
 

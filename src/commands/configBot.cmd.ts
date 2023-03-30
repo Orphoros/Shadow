@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction, MessageEmbed,
+  CacheType, ChannelType, ChatInputCommandInteraction, EmbedBuilder, PermissionFlagsBits,
 } from 'discord.js';
 import { DiscordClient } from '../typings/client';
 import { BotGuildConfig } from '../schemas';
@@ -137,7 +137,10 @@ export default {
         .setName('config')
         .setDescription('Show a list of all the current configurations'))),
 
-  async execute(interaction: CommandInteraction<CacheType>, client: DiscordClient): Promise<void> {
+  async execute(
+    interaction: ChatInputCommandInteraction<CacheType>,
+    client: DiscordClient,
+  ): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const command = `${interaction.options.getSubcommandGroup() ?? 'def'}.${interaction.options.getSubcommand()}`;
       const query = {
@@ -152,9 +155,11 @@ export default {
       switch (command) {
         case 'set.welcome-channel': {
           const channelID = interaction.options.getChannel('welcome-channel')?.id;
-          const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
-          if (!cnl) {
+          const cnl = interaction.channel;
+          if (cnl === null
+            || cnl.type !== ChannelType.GuildText
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.SendMessages)) {
             sendResponse(interaction, 'Could not set this channel for the welcome message channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
@@ -171,9 +176,11 @@ export default {
 
         case 'set.introduction-channel': {
           const channelID = interaction.options.getChannel('introduction-channel')?.id;
-          const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
-          if (!cnl) {
+          const cnl = interaction.channel;
+          if (cnl === null
+            || cnl.type !== ChannelType.GuildText
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.SendMessages)) {
             sendResponse(interaction, 'Could not set this channel for the introduction channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
@@ -190,9 +197,11 @@ export default {
 
         case 'set.rules-channel': {
           const channelID = interaction.options.getChannel('rules-channel')?.id;
-          const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
-          if (!cnl) {
+          const cnl = interaction.channel;
+          if (cnl === null
+            || cnl.type !== ChannelType.GuildText
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.SendMessages)) {
             sendResponse(interaction, 'Could not set this channel for the rules channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
@@ -209,9 +218,11 @@ export default {
 
         case 'set.announcements-channel': {
           const channelID = interaction.options.getChannel('announcements-channel')?.id;
-          const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && (c.type === 'GUILD_TEXT' || c.type === 'GUILD_NEWS') && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
-          if (!cnl) {
+          const cnl = interaction.channel;
+          if (cnl === null
+            || (cnl.type !== ChannelType.GuildText && cnl.type !== ChannelType.GuildAnnouncement)
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.SendMessages)) {
             sendResponse(interaction, 'Could not set this channel for the announcements channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
@@ -228,9 +239,13 @@ export default {
 
         case 'set.members-counter-channel': {
           const channelID = interaction.options.getChannel('vc')?.id;
-          const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && c.type === 'GUILD_VOICE');
-          if (!cnl) {
+          const cnl = interaction.channel;
+          if (cnl === null
+            || cnl.type !== ChannelType.GuildVoice
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.ViewChannel)
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.ManageChannels)) {
             sendResponse(interaction, 'Could not set this channel for the members counter channel! Channel needs to be a voice channel and the bot must be able see it and edit its name!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
@@ -250,9 +265,11 @@ export default {
 
         case 'set.main-channel': {
           const channelID = interaction.options.getChannel('general-channel')?.id;
-          const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && c.type === 'GUILD_TEXT' && c.permissionsFor(interaction.guild!.me!).has('SEND_MESSAGES'));
-          if (!cnl) {
+          const cnl = interaction.channel;
+          if (cnl === null
+            || cnl.type !== ChannelType.GuildText
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.SendMessages)) {
             sendResponse(interaction, 'Could not set this channel for the main channel! Channel needs to be a text channel and the bot must be able to write to it!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
@@ -269,9 +286,13 @@ export default {
 
         case 'set.auto-vc': {
           const channelID = interaction.options.getChannel('vc')?.id;
-          const cnl = interaction.guild?.channels.cache
-            .find((c) => c.id === channelID && c.type === 'GUILD_VOICE');
-          if (!cnl) {
+          const cnl = interaction.channel;
+          if (cnl === null
+            || cnl.type !== ChannelType.GuildVoice
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.ViewChannel)
+            || !cnl.permissionsFor(interaction.guild!.members.me!)
+              .has(PermissionFlagsBits.ManageChannels)) {
             sendResponse(interaction, 'Could not set this channel for auto voice channel monitoring! The channel needs to be a voice channel and the bot must be able to create new voice channels there!', EmbedMessageType.Error, 'Could not send interaction message to user');
             return;
           }
@@ -348,7 +369,7 @@ export default {
             sendResponse(interaction, `Moderator role <@&${roleID}> is already configured! Cannot add it again!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
             break;
           }
-          if (role!.position >= interaction.guild!.me!.roles.highest.position) {
+          if (role!.position >= interaction.guild!.members.me!.roles.highest.position) {
             sendResponse(interaction, `Not possible add moderator role <@&${role?.id}> at the moment!\n
             The bot can only work with roles that are below its permission level!`, EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
@@ -373,7 +394,7 @@ export default {
             sendResponse(interaction, `Base role <@&${roleID}> is already configured! Cannot add it again!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
             break;
           }
-          if (role!.position >= interaction.guild!.me!.roles.highest.position) {
+          if (role!.position >= interaction.guild!.members.me!.roles.highest.position) {
             sendResponse(interaction, `Not possible add base role <@&${role?.id}> at the moment!\n
             The bot can only work with roles that are below its permission level!`, EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
@@ -452,7 +473,7 @@ export default {
             sendResponse(interaction, 'This bot is not configured for this server! The bot could not automatically configure itself for this server! Contact the developer or a database admin!', EmbedMessageType.Error, 'Could not send interaction message to user');
             break;
           }
-          const embed = new MessageEmbed()
+          const embed = new EmbedBuilder()
             .setAuthor({ name: `${client.user?.username}`, iconURL: `${client.user?.displayAvatarURL()}` })
             .setTitle('Bot Configuration')
             .setColor(0x7289da)

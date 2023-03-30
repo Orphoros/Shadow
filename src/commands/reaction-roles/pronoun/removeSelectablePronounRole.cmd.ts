@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction,
+  CacheType, ChatInputCommandInteraction,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import {
@@ -17,7 +17,7 @@ export default {
       .setName('role')
       .setDescription('Pronoun role to remove from the selectable pronoun list')
       .setRequired(true)),
-  async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const role = interaction.options.getRole('role');
 

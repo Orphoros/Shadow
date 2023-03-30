@@ -1,7 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction, MessageActionRow,
-  MessageEmbed, MessageSelectMenu,
+  ActionRowBuilder,
+  CacheType, ChatInputCommandInteraction,
+  EmbedBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectableSubgenreRoleOption, SelectableSubgenreRoleOption } from '../../../schemas';
@@ -18,7 +20,7 @@ export default {
       .setName('embed-json')
       .setDescription('Embed to display for the subgenre panel message. Must be a valid JSON string.')
       .setRequired(false)),
-  async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const roleOptions: ISelectableSubgenreRoleOption[] = await SelectableSubgenreRoleOption.find({
         guild_id: interaction.guild?.id,
@@ -47,18 +49,19 @@ export default {
             return;
           }
         } else {
-          panelMsg = new MessageEmbed()
+          panelMsg = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle('Select your subgenre! Deselect all of them to clear your preferences!');
         }
 
         const components = [
-          new MessageActionRow().addComponents(new MessageSelectMenu()
-            .setCustomId('reaction-subgenre')
-            .setMinValues(0)
-            .setMaxValues(roleOptions.length)
-            .addOptions(options)
-            .setPlaceholder('Select your subgenre preferences')),
+          new ActionRowBuilder<StringSelectMenuBuilder>()
+            .addComponents(new StringSelectMenuBuilder()
+              .setCustomId('reaction-subgenre')
+              .setMinValues(0)
+              .setMaxValues(roleOptions.length)
+              .addOptions(options)
+              .setPlaceholder('Select your subgenre preferences')),
         ];
         sendResponse(interaction, 'Subgenre menu is displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({

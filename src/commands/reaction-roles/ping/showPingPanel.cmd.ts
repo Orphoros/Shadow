@@ -1,7 +1,9 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction, MessageActionRow,
-  MessageEmbed, MessageSelectMenu,
+  ActionRowBuilder,
+  CacheType, ChatInputCommandInteraction,
+  EmbedBuilder,
+  StringSelectMenuBuilder,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import { ISelectablePingRoleOption, SelectablePingRoleOption } from '../../../schemas';
@@ -18,7 +20,7 @@ export default {
       .setName('embed-json')
       .setDescription('Embed to display for the ping panel message. Must be a valid JSON string.')
       .setRequired(false)),
-  async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const roleOptions: ISelectablePingRoleOption[] = await SelectablePingRoleOption.find({
         guild_id: interaction.guild?.id,
@@ -47,18 +49,19 @@ export default {
             return;
           }
         } else {
-          panelMsg = new MessageEmbed()
+          panelMsg = new EmbedBuilder()
             .setColor('#0099ff')
             .setTitle('Select for what you want to get pinged! Deselect all of them to clear your preferences!');
         }
 
         const components = [
-          new MessageActionRow().addComponents(new MessageSelectMenu()
-            .setCustomId('reaction-ping')
-            .setMinValues(0)
-            .setMaxValues(roleOptions.length)
-            .addOptions(options)
-            .setPlaceholder('Select your ping preferences')),
+          new ActionRowBuilder<StringSelectMenuBuilder>()
+            .addComponents(new StringSelectMenuBuilder()
+              .setCustomId('reaction-ping')
+              .setMinValues(0)
+              .setMaxValues(roleOptions.length)
+              .addOptions(options)
+              .setPlaceholder('Select your ping preferences')),
         ];
         sendResponse(interaction, 'Ping menu is displayed successfully!', EmbedMessageType.Success, 'Could not send interaction message to user');
         interaction.channel!.send({

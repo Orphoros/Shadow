@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { PresenceStatusData } from 'discord.js';
+import { ActivityType, PresenceStatusData } from 'discord.js';
 import { initAutoVCHandler } from '../handlers/autoVCHandler';
 import { DiscordClient } from '../typings/client';
 import {
@@ -14,7 +14,7 @@ export default (client: DiscordClient): void => {
     }
 
     client.user?.setStatus('idle');
-    client.user?.setActivity('boot sequence', { type: 'WATCHING' });
+    client.user?.setActivity('boot sequence', { type: ActivityType.Watching });
 
     if (!process.env.MONGO_URI || process.env.MONGO_URI === '') {
       errorLog('MONGO_URI is not set!');
@@ -86,7 +86,7 @@ export default (client: DiscordClient): void => {
         .catch((e) => {
           errorLog('Could not save the bot status config: %O', e);
           client.user?.setStatus('online');
-          client.user?.setActivity('to people', { type: 'LISTENING' });
+          client.user?.setActivity('to people', { type: ActivityType.Listening });
         });
     }
 

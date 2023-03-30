@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction,
+  CacheType, ChatInputCommandInteraction,
 } from 'discord.js';
 import { PermissionFlagsBits } from 'discord-api-types/v10';
 import {
@@ -25,7 +25,7 @@ export default {
       .setName('emoji')
       .setDescription('Emoji to display in the list of dm roles')
       .setRequired(false)),
-  async execute(interaction: CommandInteraction<CacheType>): Promise<void> {
+  async execute(interaction: ChatInputCommandInteraction<CacheType>): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const role = interaction.options.getRole('role');
       const description = interaction.options.getString('description');
@@ -51,7 +51,7 @@ export default {
         return;
       }
 
-      if (role!.position >= interaction.guild!.me!.roles.highest.position) {
+      if (role!.position >= interaction.guild!.members.me!.roles.highest.position) {
         sendResponse(interaction, `Not possible add <@&${role?.id}> to the selection at the moment!\n
         The bot can only work with roles that are below its permission level!`, EmbedMessageType.Warning, 'Could not send interaction message to user');
       } else {

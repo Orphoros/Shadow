@@ -1,9 +1,8 @@
 import { SlashCommandBuilder } from '@discordjs/builders';
 import {
-  CacheType, CommandInteraction, PresenceStatusData,
+  CacheType, ChatInputCommandInteraction, PresenceStatusData,
 } from 'discord.js';
-import { ActivityTypes } from 'discord.js/typings/enums';
-import { PermissionFlagsBits } from 'discord-api-types/v10';
+import { ActivityType, PermissionFlagsBits } from 'discord-api-types/v10';
 import { DiscordClient } from '../typings/client';
 import { BotStatusConfig } from '../schemas';
 import {
@@ -38,7 +37,10 @@ export default {
       )
       .setDescription('Set the availability appearance of the bot'))
     .setDescription('Set the status of the bot'),
-  async execute(interaction: CommandInteraction<CacheType>, client: DiscordClient): Promise<void> {
+  async execute(
+    interaction: ChatInputCommandInteraction<CacheType>,
+    client: DiscordClient,
+  ): Promise<void> {
     if (await isUserAuthorized(interaction, interaction.guild)) {
       const statusMsg = interaction.options.getString('status');
       let type: PresenceStatusData;
@@ -63,19 +65,19 @@ export default {
       let activityName: string;
       switch (interaction.options.getInteger('activity')) {
         case 1:
-          activity = ActivityTypes.PLAYING;
+          activity = ActivityType.Playing;
           activityName = 'playing';
           break;
         case 2:
-          activity = ActivityTypes.WATCHING;
+          activity = ActivityType.Watching;
           activityName = 'watching';
           break;
         case 3:
-          activity = ActivityTypes.LISTENING;
+          activity = ActivityType.Listening;
           activityName = 'listening';
           break;
         default:
-          activity = ActivityTypes.PLAYING;
+          activity = ActivityType.Playing;
           activityName = 'playing';
       }
 

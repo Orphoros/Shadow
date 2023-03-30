@@ -1,6 +1,6 @@
 import { ObjectId, Query } from 'mongoose';
 import {
-  CacheType, CommandInteraction, Guild, GuildMemberRoleManager, SelectMenuInteraction,
+  CacheType, ChatInputCommandInteraction, Guild, GuildMemberRoleManager, SelectMenuInteraction,
 } from 'discord.js';
 import { BotGuildConfig, IBotGuildConfig } from '../schemas';
 
@@ -84,7 +84,7 @@ export function getModRoles(guildId: string): Promise<string[]> {
 }
 
 export function isUserAuthorized(
-  interaction: CommandInteraction<CacheType>,
+  interaction: ChatInputCommandInteraction<CacheType>,
   guild: Guild | null,
 )
 : Promise<boolean> {

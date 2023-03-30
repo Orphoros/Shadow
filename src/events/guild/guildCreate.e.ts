@@ -1,3 +1,4 @@
+import { ChannelType, PermissionFlagsBits } from 'discord.js';
 import { DiscordClient } from '../../typings/client';
 import { errorLog, eventLog } from '../../util';
 import { BotGuildConfig } from '../../schemas';
@@ -15,7 +16,8 @@ export default (client: DiscordClient): void => {
       setDefaultsOnInsert: true,
     };
 
-    const channel = guild.channels.cache.find((c) => c.type === 'GUILD_TEXT' && c.permissionsFor(guild.me!).has('SEND_MESSAGES'));
+    const channel = guild.channels.cache.find((c) => c.type !== ChannelType.GuildText
+    && c.permissionsFor(guild!.members.me!).has(PermissionFlagsBits.SendMessages));
 
     const update = {
       main_channel_id: channel?.id,
