@@ -1,5 +1,4 @@
 import { EmbedBuilder, TextChannel } from 'discord.js';
-import path from 'path';
 import {
   getIntroductionChannelId, getMainChannelId,
   getMembersCountChannelID, errorLog,
@@ -26,20 +25,19 @@ export default (client: DiscordClient): void => {
         
         <@${member.user.id}> joined <t:${Math.floor(Date.now() / 1000)}:R>`,
       )
-      .setThumbnail(`${member.guild.iconURL()}`)
+      .setThumbnail('https://i.imgur.com/YRTheLR.gif')
       .addFields(
         { name: '\u200B', value: '\u200B' },
         { name: 'Rules channel', value: `<#${rulesChannelId ?? mainChannelId}>`, inline: true },
         { name: 'Introduction channel', value: `<#${introductionChannelId ?? mainChannelId}>`, inline: true },
       )
-      .setImage('attachment://wp_banner.png')
+      .setImage('https://i.imgur.com/n2PgUtL.gif')
       .setTimestamp()
       .setFooter({ text: `${member.client.user?.username}`, iconURL: `${member.client.user?.displayAvatarURL()}` });
 
     const channel = client.channels.cache
       .get(await getWelcomeChannelId(member.guild.id) ?? '') as TextChannel;
-    const resDir = path.resolve('./resources');
-    channel.send({ embeds: [welcomeEmbed], files: [`${resDir}/wp_banner.png`] }).catch((e) => {
+    channel.send({ embeds: [welcomeEmbed] }).catch((e) => {
       errorLog('Could not send message to user\n========================\n%O', e);
     });
 
