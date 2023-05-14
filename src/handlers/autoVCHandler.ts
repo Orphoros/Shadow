@@ -57,7 +57,7 @@ export class AutoVCManager {
       })
       .then(async (c) => {
         this.listOfVC.push({ guildID: guild.id, vc: c });
-        return member.voice.setChannel(c)
+        return member.voice.setChannel(c, 'Moving to temporary VC')
           .then(() => Promise.resolve(c))
           .catch((e) => Promise.reject(e));
       })

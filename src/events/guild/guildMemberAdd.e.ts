@@ -36,7 +36,11 @@ export default (client: DiscordClient): void => {
       .setFooter({ text: `${member.client.user?.username}`, iconURL: `${member.client.user?.displayAvatarURL()}` });
 
     const channel = client.channels.cache
-      .get(await getWelcomeChannelId(member.guild.id) ?? '') as TextChannel;
+      .get(await getWelcomeChannelId(member.guild.id) ?? '') as TextChannel | undefined;
+    if (!channel) {
+      errorLog('Could not find welcome channel %o for guild %o', await getWelcomeChannelId(member.guild.id), member.guild.id);
+      return;
+    }
     channel.send({ embeds: [welcomeEmbed] }).catch((e) => {
       errorLog('Could not send message to user\n========================\n%O', e);
     });
