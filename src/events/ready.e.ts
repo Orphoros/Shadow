@@ -22,9 +22,7 @@ export default (client: DiscordClient): void => {
       return;
     }
 
-    await mongoose.connect(process.env.MONGO_URI, {
-      keepAlive: true,
-    })
+    await mongoose.connect(process.env.MONGO_URI, {})
       .then(() => {
         bootLog('Connected to MongoDB!');
       })

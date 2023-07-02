@@ -2,8 +2,9 @@ import { DiscordClient } from '../../typings/client';
 import { errorLog, eventLog } from '../../util';
 import {
   BotGuildConfig, SelectableAgeRoleOption, SelectableColorRoleOption,
-  SelectableDMRoleOption, SelectablePingRoleOption, SelectablePronounRoleOption,
-  SelectableRegionRoleOption,
+  SelectableDMRoleOption, SelectableDutyRoleOption, SelectableJobRoleOption,
+  SelectablePingRoleOption, SelectablePronounRoleOption, SelectableRegionRoleOption,
+  SelectableSubgenreRoleOption,
 } from '../../schemas';
 
 export default (client: DiscordClient): void => {
@@ -50,12 +51,30 @@ export default (client: DiscordClient): void => {
         errorLog('DB error\n========================\n%O', e);
       });
 
+    SelectableDutyRoleOption.deleteMany({ guild_id: guild?.id })
+      .then(() => {
+        eventLog(`Removed guild selectable duty role options for "${guild.name}" (${guild.id})`);
+      })
+      .catch((e) => {
+        eventLog(`Could not remove guild selectable duty role options for "${guild.name}" (${guild.id})`);
+        errorLog('DB error\n========================\n%O', e);
+      });
+
     SelectablePingRoleOption.deleteMany({ guild_id: guild?.id })
       .then(() => {
         eventLog(`Removed guild selectable ping role options for "${guild.name}" (${guild.id})`);
       })
       .catch((e) => {
         eventLog(`Could not remove guild selectable ping role options for "${guild.name}" (${guild.id})`);
+        errorLog('DB error\n========================\n%O', e);
+      });
+
+    SelectableJobRoleOption.deleteMany({ guild_id: guild?.id })
+      .then(() => {
+        eventLog(`Removed guild selectable job role options for "${guild.name}" (${guild.id})`);
+      })
+      .catch((e) => {
+        eventLog(`Could not remove guild selectable job role options for "${guild.name}" (${guild.id})`);
         errorLog('DB error\n========================\n%O', e);
       });
 
@@ -74,6 +93,15 @@ export default (client: DiscordClient): void => {
       })
       .catch((e) => {
         eventLog(`Could not remove guild selectable region role options for "${guild.name}" (${guild.id})`);
+        errorLog('DB error\n========================\n%O', e);
+      });
+
+    SelectableSubgenreRoleOption.deleteMany({ guild_id: guild?.id })
+      .then(() => {
+        eventLog(`Removed guild selectable subgenre role options for "${guild.name}" (${guild.id})`);
+      })
+      .catch((e) => {
+        eventLog(`Could not remove guild selectable subgenre role options for "${guild.name}" (${guild.id})`);
         errorLog('DB error\n========================\n%O', e);
       });
   });
