@@ -50,17 +50,17 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
 
-  deploy-image:
-    name: Deploy
-    runs-on: self-hosted
-    needs: push-to-registry
+  # deploy-image:
+  #   name: Deploy
+  #   runs-on: self-hosted
+  #   needs: push-to-registry
 
-    steps:
-      - name: Install SSH key
-        uses: shimataro/ssh-key-action@v2
-        with:
-          key: ${{ secrets.DEPLOYMENT_SSH }}
-          known_hosts: ${{ secrets.KNOWN_HOST }}
-          if_key_exists: ignore
-      - name: Execute Deployment Script
-        run: ssh docker-runner@srv.orphoros.com ./docker/DockerDeploy.sh shadow 172.19.0.14 3000:3000
+  #   steps:
+  #     - name: Install SSH key
+  #       uses: shimataro/ssh-key-action@v2
+  #       with:
+  #         key: ${{ secrets.DEPLOYMENT_SSH }}
+  #         known_hosts: ${{ secrets.KNOWN_HOST }}
+  #         if_key_exists: ignore
+  #     - name: Execute Deployment Script
+  #       run: ssh docker-runner@srv.orphoros.com ./docker/DockerDeploy.sh shadow 172.19.0.14 3000:3000
